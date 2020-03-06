@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <Fastcutting.label>快速切割技术</Fastcutting.label>
+  <Fastcutting.description>能更加快速的将各种块堆切割成复合石材（提升速度），但会影响每次的出产率。</Fastcutting.description>
+
+  <Delicatecutting.label>精致切割技术</Delicatecutting.label>
+  <Delicatecutting.description>能更加有效的将各种块堆切割成复合石材（增加产出），但会影响作业时间。</Delicatecutting.description>
+
+
+  
+</LanguageData>

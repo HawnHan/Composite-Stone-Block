@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <ResearchProjectDef>
+    <defName>Fastcutting</defName>
+    <label>Fast cutting</label>
+    <techLevel>Medieval</techLevel>
+    <baseCost>600</baseCost>
+    <description>It can be more fast to cut a variety of blocks into Composite stone, but it will affect the production rate each time.</description>
+    <prerequisites>
+      <li>Stonecutting</li>
+    </prerequisites>
+    <tab>CompositeTechnology</tab>
+    <researchViewX>0</researchViewX>
+    <researchViewY>2</researchViewY>
+  </ResearchProjectDef>
+  <ResearchProjectDef>
+    <defName>Delicatecutting</defName>
+    <label>Delicate cutting</label>
+    <techLevel>Medieval</techLevel>
+    <baseCost>600</baseCost>
+    <description>It can be more effective to cut a variety of blocks into Composite stone, but it will affect the operation time.</description>
+    <prerequisites>
+      <li>Stonecutting</li>
+    </prerequisites>
+    <tab>CompositeTechnology</tab>
+    <researchViewX>0</researchViewX>
+    <researchViewY>4</researchViewY>
+  </ResearchProjectDef>
+</Defs>

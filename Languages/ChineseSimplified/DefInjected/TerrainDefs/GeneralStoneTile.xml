@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <TileCompositeStone.label>复合石材地板</TileCompositeStone.label>
+  <TileCompositeStone.description>粗糙切割的岩石地砖。不太好看，但非常适合铺设道路和室外的走道。拆除石板无法回收资源。</TileCompositeStone.description>
+  <FlagCompositeStone.label>复合石材石板</FlagCompositeStone.label>
+  <FlagCompositeStone.description>坚固的石质地砖给人以城堡一样的感觉。看起来很漂亮，就是铺设速度较慢。</FlagCompositeStone.description>
+  <!--Patch of Royalty DLC-->
+  <FineTileCompositeBlock.label>精致复合石材地砖</FineTileCompositeBlock.label>
+  <FineTileCompositeBlock.description>精美的石砖，做功不接受一丝妥协，以此表现地位。施工缓慢。</FineTileCompositeBlock.description>
+  <!-- Patch of Simply Bridges-->
+  <DeepWaterBridgeBlockCompositeStone.label>复合石材深水桥</DeepWaterBridgeBlockCompositeStone.label>
+  <DeepWaterBridgeBlockCompositeStone.description>平坦而稳健的架设在深水之上的桥，以你选所的材料所建。你甚至可在其上建造需求重型地形支持的物体，需要小心的是，桥梁可被损毁。如果桥梁塌陷，建于其上的建筑也会一起掉落。</DeepWaterBridgeBlockCompositeStone.description>
+  <HeavyBridgeBlockCompositeStone.label>复合石材桥</HeavyBridgeBlockCompositeStone.label>
+  <HeavyBridgeBlockCompositeStone.description>架设在水上，表面光滑的桥，以你所选的材料所建。你甚至可在其上建造需求重型地形支持的物体，需要小心的是，桥梁可被损毁。如果桥梁塌陷，建于其上的建筑也会一起掉落。</HeavyBridgeBlockCompositeStone.description>
+
+</LanguageData>

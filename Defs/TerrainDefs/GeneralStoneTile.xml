@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <TerrainDef ParentName="TileStoneBase">
+    <defName>TileCompositeStone</defName>
+    <label>Composite Stone Tile</label>
+    <statBases>
+      <WorkToBuild>700</WorkToBuild>
+      <Beauty>2</Beauty>
+    </statBases>
+    <color>(189,189,189)</color>
+    <costList>
+      <BlockCompositeStone>4</BlockCompositeStone>
+    </costList>
+  </TerrainDef>
+
+  <TerrainDef ParentName="FlagstoneBase">
+    <defName>FlagCompositeStone</defName>
+    <label>Composite Stone flagstone</label>
+    <statBases>
+      <WorkToBuild>290</WorkToBuild>
+      <Beauty>1</Beauty>
+    </statBases>
+    <color>(189,189,189)</color>
+    <costList>
+      <BlockCompositeStone>4</BlockCompositeStone>
+    </costList>
+  </TerrainDef>
+</Defs>

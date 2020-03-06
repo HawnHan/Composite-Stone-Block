@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ModMetaData>
+ 
+ <name>复合石材</name>
+ 
+ <author>YangHgRi</author>
+
+ <packageId>YangHgRi.CompositeStone</packageId>
+
+  <description>
+  增加一种复合石材,能用任何石头生产.
+  属性增强了一些,相比起其他石材更有优势.
+  系数：
+  市场价值系数0.42（普通石材0.4，大理石0.45）
+  最大生命值1.8（普通石材2.4，大理石1.2）
+  建设时间5.0（普通石材6.0，大理石5.5）
+  制作时间1.2（普通石材1.3，大理石1.15）
+  开门速度0.5（普通石材0.45）
+  休息效率1.0（普通石材0.9）
+  属性：
+  美观度：1.2（大理石1.35）
+  质量：1.15（花岗岩1.25，大理石1.25）
+  市场价值：1.9（默认）
+  
+  +增加了对应的地板
+  +增加快速切割（需要科技）
+  +增加精致切割（需要科技）
+</description>
+
+ <supportedVersions>
+  <li>1.1</li>
+ </supportedVersions>
+
+</ModMetaData>

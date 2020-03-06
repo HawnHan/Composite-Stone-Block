@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <BlockCompositeStone.label>复合石材</BlockCompositeStone.label>
+  <BlockCompositeStone.description>能够使用任何石头加工而成的复合石材.</BlockCompositeStone.description>
+  <BlockCompositeStone.stuffProps.stuffAdjective>复合石材</BlockCompositeStone.stuffProps.stuffAdjective>
+
+
+</LanguageData>

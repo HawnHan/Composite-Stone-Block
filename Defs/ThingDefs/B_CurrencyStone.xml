@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThingDef ParentName="StoneBlocksBase">
+    <defName>BlockCompositeStone</defName>
+    <label>Composite Stone</label>
+    <description>Can use any stone processing Composite Stone.</description>
+    <graphicData>
+      <color>(189,189,189)</color>
+    </graphicData>
+    <statBases>
+      <Mass>1.15</Mass>
+    </statBases>
+    <stuffProps>
+      <color>(189,189,189)</color>
+      <soundImpactStuff>BulletImpact_Ground</soundImpactStuff>
+      <soundMeleeHitSharp>MeleeHit_Stone</soundMeleeHitSharp>
+      <soundMeleeHitBlunt>MeleeHit_Stone</soundMeleeHitBlunt>
+      <stuffAdjective>Composite Stone</stuffAdjective>
+      <statFactors>
+        <Beauty>1.2</Beauty>
+        <MarketValue>0.42</MarketValue>
+        <MaxHitPoints>1.8</MaxHitPoints>
+        <WorkToBuild>5.0</WorkToBuild>
+        <WorkToMake>1.2</WorkToMake>
+        <DoorOpenSpeed>0.5</DoorOpenSpeed>
+        <BedRestEffectiveness>1.0</BedRestEffectiveness>
+      </statFactors>
+    </stuffProps>
+  </ThingDef>
+</Defs>
