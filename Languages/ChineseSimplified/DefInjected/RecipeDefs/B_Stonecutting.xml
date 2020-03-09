@@ -10,4 +10,40 @@
   <MakeCompositeStoneD.label>加工复合石材(精致)</MakeCompositeStoneD.label>
   <MakeCompositeStoneD.description>能将任意的大块石头切割成复合的石材,切割速度降低,产量提升.</MakeCompositeStoneD.description>
 
+  <MakeCompositeStoneBlocks5Elec.label>批量加工5份复合石材(电力量产切石桌)</MakeCompositeStoneBlocks5Elec.label>
+  <MakeCompositeStoneBlocks5Elec.description>能在电力量产切石桌一次性将5块任意的大块石头切割成复合的石材</MakeCompositeStoneBlocks5Elec.description>
+
+  <MakeCompositeStoneBlocks10Elec.label>批量加工10份复合石材</MakeCompositeStoneBlocks10Elec.label>
+  <MakeCompositeStoneBlocks10Elec.description>能在电力量产切石桌一次性将10块任意的大块石头切割成复合的石材</MakeCompositeStoneBlocks10Elec.description>
+
+  <MakeCompositeStoneBlocks5ElecFast.label>快速批量加工5份复合石材</MakeCompositeStoneBlocks5ElecFast.label>
+  <MakeCompositeStoneBlocks5ElecFast.description>能在电力量产切石桌一次性将5块任意的大块石头切割成复合的石材,切割速度提升,产量降低.</MakeCompositeStoneBlocks5ElecFast.description>
+
+  <MakeCompositeStoneBlocks10ElecFast.label>快速批量加工10份复合石材</MakeCompositeStoneBlocks10ElecFast.label>
+  <MakeCompositeStoneBlocks10ElecFast.description>能在电力量产切石桌一次性将10块任意的大块石头切割成复合的石材,切割速度提升,产量降低.</MakeCompositeStoneBlocks10ElecFast.description>
+
+  <MakeCompositeStoneBlocks5ElecDelicate.label>精致批量加工5份复合石材</MakeCompositeStoneBlocks5ElecDelicate.label>
+  <MakeCompositeStoneBlocks5ElecDelicate.description>能在电力量产切石桌一次性将5块任意的大块石头切割成复合的石材,切割速度降低,产量提升.</MakeCompositeStoneBlocks5ElecDelicate.description>
+
+  <MakeCompositeStoneBlocks10ElecDelicate.label>精致批量加工10份复合石材</MakeCompositeStoneBlocks10ElecDelicate.label>
+  <MakeCompositeStoneBlocks10ElecDelicate.description>能在电力量产切石桌一次性将10块任意的大块石头切割成复合的石材,切割速度降低,产量提升.</MakeCompositeStoneBlocks10ElecDelicate.description>
+
+  <MakeCompositeStoneBlocks5NoElec.label>批量加工5份复合石材</MakeCompositeStoneBlocks5NoElec.label>
+  <MakeCompositeStoneBlocks5NoElec.description>能在量产切石桌一次性将5块任意的大块石头切割成复合的石材</MakeCompositeStoneBlocks5NoElec.description>
+
+  <MakeCompositeStoneBlocks10NoElec.label>批量加工10份复合石材</MakeCompositeStoneBlocks10NoElec.label>
+  <MakeCompositeStoneBlocks10NoElec.description>能在量产切石桌一次性将10块任意的大块石头切割成复合的石材</MakeCompositeStoneBlocks10NoElec.description>
+
+  <MakeCompositeStoneBlocks5NoElecFast.label>快速批量加工5份复合石材</MakeCompositeStoneBlocks5NoElecFast.label>
+  <MakeCompositeStoneBlocks5NoElecFast.description>能在量产切石桌一次性将5块任意的大块石头切割成复合的石材,切割速度提升,产量降低.</MakeCompositeStoneBlocks5NoElecFast.description>
+
+  <MakeCompositeStoneBlocks10NoElecFast.label>快速批量加工10份复合石材</MakeCompositeStoneBlocks10NoElecFast.label>
+  <MakeCompositeStoneBlocks10NoElecFast.description>能在量产切石桌一次性将10块任意的大块石头切割成复合的石材,切割速度提升,产量降低.</MakeCompositeStoneBlocks10NoElecFast.description>
+
+  <MakeCompositeStoneBlocks5NoElecDelicate.label>精致批量加工5份复合石材</MakeCompositeStoneBlocks5NoElecDelicate.label>
+  <MakeCompositeStoneBlocks5NoElecDelicate.description>能在量产切石桌一次性将5块任意的大块石头切割成复合的石材,切割速度降低,产量提升.</MakeCompositeStoneBlocks5NoElecDelicate.description>
+
+  <MakeCompositeStoneBlocks10NoElecDelicate.label>精致批量加工10份复合石材</MakeCompositeStoneBlocks10NoElecDelicate.label>
+  <MakeCompositeStoneBlocks10NoElecDelicate.description>能在量产切石桌一次性将10块任意的大块石头切割成复合的石材,切割速度降低,产量提升.</MakeCompositeStoneBlocks10NoElecDelicate.description>
+
 </LanguageData>
