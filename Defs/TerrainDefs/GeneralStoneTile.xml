@@ -1,28 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-  <TerrainDef ParentName="TileStoneBase">
-    <defName>TileCompositeStone</defName>
-    <label>Composite Stone Tile</label>
-    <statBases>
-      <WorkToBuild>700</WorkToBuild>
-      <Beauty>2</Beauty>
-    </statBases>
-    <color>(189,189,189)</color>
-    <costList>
-      <BlockCompositeStone>4</BlockCompositeStone>
-    </costList>
-  </TerrainDef>
+    <TerrainDef ParentName="TileStoneBase">
+        <defName>TileCompositeStone</defName>
+        <label>Composite Stone Tile</label>
+        <statBases>
+            <WorkToBuild>700</WorkToBuild>
+            <Beauty>2</Beauty>
+        </statBases>
+        <color>(189,189,189)</color>
+        <costList>
+            <BlockCompositeStone>4</BlockCompositeStone>
+        </costList>
+    </TerrainDef>
 
-  <TerrainDef ParentName="FlagstoneBase">
-    <defName>FlagCompositeStone</defName>
-    <label>Composite Stone flagstone</label>
-    <statBases>
-      <WorkToBuild>290</WorkToBuild>
-      <Beauty>1</Beauty>
-    </statBases>
-    <color>(189,189,189)</color>
-    <costList>
-      <BlockCompositeStone>4</BlockCompositeStone>
-    </costList>
-  </TerrainDef>
+    <TerrainDef ParentName="FlagstoneBase">
+        <defName>FlagCompositeStone</defName>
+        <label>Composite Stone flagstone</label>
+        <statBases>
+            <WorkToBuild>290</WorkToBuild>
+            <Beauty>1</Beauty>
+        </statBases>
+        <color>(189,189,189)</color>
+        <costList>
+            <BlockCompositeStone>4</BlockCompositeStone>
+        </costList>
+    </TerrainDef>
+
+	<TerrainDef ParentName="FineTileStoneBase" MayRequire="ludeon.rimworld.royalty">
+		<defName>FineTileCompositeBlock</defName>
+		<label>fine Composite Stone tile</label>
+		<color>(189,189,189)</color>
+		<statBases>
+			<WorkToBuild>6000</WorkToBuild>
+			<Beauty>4</Beauty>
+		</statBases>
+		<costList>
+			<BlockCompositeStone>20</BlockCompositeStone>
+		</costList>
+	</TerrainDef>
 </Defs>

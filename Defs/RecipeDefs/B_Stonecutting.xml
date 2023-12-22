@@ -1,10 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-
-	<RecipeDef ParentName="MakeStoneBlocksBase">
-		<defName>MakeCompositeStone</defName>
+	<RecipeDef Name="MakeCompositeStoneBase" Abstract="True">
+		<jobString>Composite stone processing.</jobString>
+		<workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+		<effectWorking>CutStone</effectWorking>
+		<soundWorking>Recipe_MakeStoneBlocks</soundWorking>
 		<label>Composite stone processing</label>
 		<description>You can cut all the big stones into Composite stones.</description>
+		<fixedIngredientFilter>
+			<categories>
+				<li>StoneChunks</li>
+			</categories>
+		</fixedIngredientFilter>
+		<recipeUsers>
+			<li>TableStonecutter</li>
+			<li MayRequire="vanillaexpanded.vfeproduction">VFE_TableStonecutterElectric</li>
+			<li MayRequire="kikohi.jewelry">LaserTableSculpting</li>
+		</recipeUsers>
+	</RecipeDef>
+	<!--Base-->
+	<RecipeDef ParentName="MakeCompositeStoneBase">
+		<defName>MakeCompositeStone</defName>
 		<workAmount>1600</workAmount>
 		<ingredients>
 			<li>
@@ -19,19 +35,11 @@
 		<products>
 			<BlockCompositeStone>20</BlockCompositeStone>
 		</products>
-		<fixedIngredientFilter>
-			<categories>
-				<li>StoneChunks</li>
-			</categories>
-		</fixedIngredientFilter>
-		<workSkill>Crafting</workSkill>
-		
 	</RecipeDef>
-	
-	<RecipeDef ParentName="MakeStoneBlocksBase">
+	<!--Fast-->
+	<RecipeDef ParentName="MakeCompositeStoneBase">
 		<defName>MakeCompositeStoneS</defName>
 		<label>Composite stone processing(Fast)</label>
-		<description>You can cut all the big stones into Composite stones.</description>
 		<workAmount>1200</workAmount>
 		<ingredients>
 			<li>
@@ -46,22 +54,15 @@
 		<products>
 			<BlockCompositeStone>15</BlockCompositeStone>
 		</products>
-		<fixedIngredientFilter>
-			<categories>
-				<li>StoneChunks</li>
-			</categories>
-		</fixedIngredientFilter>
 		<skillRequirements>
 			<Crafting>4</Crafting>
 	    </skillRequirements>
-		<workSkill>Crafting</workSkill>
 		<researchPrerequisite>Fastcutting</researchPrerequisite>
 	</RecipeDef>
-	
-	<RecipeDef ParentName="MakeStoneBlocksBase">
+	<!--Delicate-->
+	<RecipeDef ParentName="MakeCompositeStoneBase">
 		<defName>MakeCompositeStoneD</defName>
 		<label>Composite stone processing(Delicate)</label>
-		<description>You can cut all the big stones into Composite stones.</description>
 		<workAmount>2000</workAmount>
 		<ingredients>
 			<li>
@@ -76,16 +77,104 @@
 		<products>
 			<BlockCompositeStone>25</BlockCompositeStone>
 		</products>
-		<fixedIngredientFilter>
-			<categories>
-				<li>StoneChunks</li>
-			</categories>
-		</fixedIngredientFilter>
 		<skillRequirements>
 			<Crafting>4</Crafting>
 	    </skillRequirements>
-		<workSkill>Crafting</workSkill>
 		<researchPrerequisite>Delicatecutting</researchPrerequisite>
 	</RecipeDef>
+	<!--Batch-->
+	<RecipeDef ParentName="MakeCompositeStoneBase">
+		<defName>MakeCompositeStoneB</defName>
+		<label>Composite stone processing(Batch)</label>
+		<workAmount>4320</workAmount>
+		<ingredients>
+			<li>
+				<filter>
+					<categories>
+						<li>StoneChunks</li>
+					</categories>
+				</filter>
+				<count>3</count>
+			</li>
+		</ingredients>
+		<products>
+			<BlockCompositeStone>45</BlockCompositeStone>
+		</products>
+		<skillRequirements>
+			<Crafting>6</Crafting>
+		</skillRequirements>
+		<researchPrerequisites>
+			<li>Fastcutting</li>
+			<li>Delicatecutting</li>
+		</researchPrerequisites>
+	</RecipeDef>
+	<!--Fast and Batch-->
+	<RecipeDef ParentName="MakeCompositeStoneBase">
+		<defName>MakeCompositeStoneFB</defName>
+		<label>Composite stone processing(Fast and Batch)</label>
+		<workAmount>3240</workAmount>
+		<ingredients>
+			<li>
+				<filter>
+					<categories>
+						<li>StoneChunks</li>
+					</categories>
+				</filter>
+				<count>3</count>
+			</li>
+		</ingredients>
+		<products>
+			<BlockCompositeStone>45</BlockCompositeStone>
+		</products>
+		<skillRequirements>
+			<Crafting>8</Crafting>
+		</skillRequirements>
+		<researchPrerequisite>FastcuttingB</researchPrerequisite>
+	</RecipeDef>
+	<!--Delicate and Batch-->
+	<RecipeDef ParentName="MakeCompositeStoneBase">
+		<defName>MakeCompositeStoneDB</defName>
+		<label>Composite stone processing(Delicate and Batch)</label>
+		<workAmount>5400</workAmount>
+		<ingredients>
+			<li>
+				<filter>
+					<categories>
+						<li>StoneChunks</li>
+					</categories>
+				</filter>
+				<count>3</count>
+			</li>
+		</ingredients>
+		<products>
+			<BlockCompositeStone>75</BlockCompositeStone>
+		</products>
+		<skillRequirements>
+			<Crafting>8</Crafting>
+		</skillRequirements>
+		<researchPrerequisite>DelicatecuttingB</researchPrerequisite>
+	</RecipeDef>
 
+	<RecipeDef ParentName="MakeCompositeStoneBase">
+		<defName>MakeCompositeStoneM</defName>
+		<label>Composite stone processing(Master)</label>
+		<workAmount>3240</workAmount>
+		<ingredients>
+			<li>
+				<filter>
+					<categories>
+						<li>StoneChunks</li>
+					</categories>
+				</filter>
+				<count>3</count>
+			</li>
+		</ingredients>
+		<products>
+			<BlockCompositeStone>75</BlockCompositeStone>
+		</products>
+		<skillRequirements>
+			<Crafting>10</Crafting>
+		</skillRequirements>
+		<researchPrerequisite>Mastercutting</researchPrerequisite>
+	</RecipeDef>
 </Defs>

@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+	<Operation Class="PatchOperationSequence">
+		<operations>
+			<li Class="PatchOperationConditional">
+				<xpath>Defs/RecipeDef[@Name="MakeStoneBlocksBulkBase"]</xpath>
+				<match Class="PatchOperationSequence">
+					<operations>
+					<li Class="PatchOperationAdd">
+						<xpath>Defs/RecipeDef[@Name="MakeStoneBlocksBulkBase"]/recipeUsers</xpath>
+						<value>
+							<li MayRequire="vanillaexpanded.vfeproduction">VFE_TableStonecutterElectric</li>
+							<li MayRequire="kikohi.jewelry">LaserTableSculpting</li>
+						</value>
+					</li>
+					<li Class="PatchOperationReplace">
+						<xpath>Defs/RecipeDef[@Name="MakeCompositeStoneBase"]/workSpeedStat</xpath>
+						<value>
+							<workSpeedStat>StonecuttingSpeed</workSpeedStat>
+						</value>
+					</li>
+					<li Class="PatchOperationAdd">
+						<xpath>Defs/RecipeDef[@Name="MakeCompositeStoneBase"]</xpath>
+						<value>
+							<workSkill>Crafting</workSkill>
+							<workSkillLearnFactor>0.25</workSkillLearnFactor>
+						</value>
+					</li>
+					</operations>
+				</match>
+			</li>
+			<li Class="PatchOperationConditional">
+				<xpath>Defs/MainButtonDef[defName="RSLUM_tab"]</xpath>
+				<match Class="PatchOperationConditional">
+					<xpath>Defs/StatDef[defName="StonecuttingSpeed"]/parts</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>Defs/StatDef[defName="StonecuttingSpeed"]</xpath>
+						<value>
+							<parts>
+								<li Class="FP_RSLUM.StatPart_DEX">
+									<weight>0.5</weight>
+								</li>
+							</parts>
+						</value>
+					</nomatch>
+					<match Class="PatchOperationAdd">
+						<xpath>Defs/StatDef[defName="StonecuttingSpeed"]/parts</xpath>
+						<value>
+							<li Class="FP_RSLUM.StatPart_DEX">
+								<weight>0.5</weight>
+							</li>
+						</value>
+					</match>
+				</match>
+			</li>
+		</operations>
+	</Operation>
+</Patch>

@@ -2,11 +2,19 @@
 <LanguageData>
 
   <Fastcutting.label>快速切割技术</Fastcutting.label>
-  <Fastcutting.description>能更加快速的将各种块堆切割成复合石材（提升速度），但会影响每次的出产率。</Fastcutting.description>
+  <Fastcutting.description>能更加快速的将各种块堆切割成复合石材（提升速度），但会影响产出率。</Fastcutting.description>
 
   <Delicatecutting.label>精致切割技术</Delicatecutting.label>
-  <Delicatecutting.description>能更加有效的将各种块堆切割成复合石材（增加产出），但会影响作业时间。</Delicatecutting.description>
+  <Delicatecutting.description>能更加有效的将各种块堆切割成复合石材（增加产出），但工作量增大。</Delicatecutting.description>
+
+  <FastcuttingB.label>快速切割量产</FastcuttingB.label>
+  <FastcuttingB.description>能高速一次性切割3个快堆，但会影响产出率。</FastcuttingB.description>
+
+  <DelicatecuttingB.label>精致切割量产</DelicatecuttingB.label>
+  <DelicatecuttingB.description>慢活出细工，一次性切割3个快堆，产量增加，但工作量增大。</DelicatecuttingB.description>
+
+  <Mastercutting.label>完美量产</Mastercutting.label>
+  <Mastercutting.description>时间，质量，皆为完美。</Mastercutting.description>
 
 
-  
 </LanguageData>
