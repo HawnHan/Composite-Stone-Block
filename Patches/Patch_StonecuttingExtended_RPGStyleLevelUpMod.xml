@@ -37,7 +37,7 @@
 						<xpath>Defs/StatDef[defName="StonecuttingSpeed"]</xpath>
 						<value>
 							<parts>
-								<li Class="FP_RSLUM.StatPart_DEX">
+								<li Class="FP_RSLUM.StatPart_STR">
 									<weight>0.5</weight>
 								</li>
 							</parts>
@@ -46,7 +46,7 @@
 					<match Class="PatchOperationAdd">
 						<xpath>Defs/StatDef[defName="StonecuttingSpeed"]/parts</xpath>
 						<value>
-							<li Class="FP_RSLUM.StatPart_DEX">
+							<li Class="FP_RSLUM.StatPart_STR">
 								<weight>0.5</weight>
 							</li>
 						</value>
