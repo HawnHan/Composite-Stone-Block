@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <HugsLib.UpdateFeatureDef Abstract="true" Name="CompositeStone_UpdateFeatureBase">
+    <modNameReadable>CompositeStone</modNameReadable>
+    <linkUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=2007600649</linkUrl>
+  </HugsLib.UpdateFeatureDef>
+  <HugsLib.UpdateFeatureDef ParentName="CompositeStone_UpdateFeatureBase">
+    <defName>CompositeStone_1_0_4</defName>
+    <assemblyVersion>1.0.4</assemblyVersion>
+    <content>新增对Vanilla Factions Expanded - Mechanoids的支持，现在可以在砖瓦切割机(Masonry saw)中使用各类石材自动生产复合石材</content>
+  </HugsLib.UpdateFeatureDef>
+</Defs>
