@@ -12,7 +12,7 @@
     </statBases>
     <stuffProps>
       <color>(189,189,189)</color>
-      <soundImpactStuff>BulletImpact_Ground</soundImpactStuff>
+      <soundImpactBullet>BulletImpact_Ground</soundImpactBullet>
       <soundMeleeHitSharp>MeleeHit_Stone</soundMeleeHitSharp>
       <soundMeleeHitBlunt>MeleeHit_Stone</soundMeleeHitBlunt>
       <stuffAdjective>Composite Stone</stuffAdjective>

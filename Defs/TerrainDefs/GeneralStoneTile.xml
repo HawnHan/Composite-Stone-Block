@@ -38,4 +38,32 @@
 			<BlockCompositeStone>20</BlockCompositeStone>
 		</costList>
 	</TerrainDef>
+
+    <TerrainDef ParentName="TileStoneBase">
+        <defName>CleanCompositeStone</defName>
+        <label>Clean Composite Stone tile</label>
+        <description>The composite stone tiles contain silver components, making their surface extremely smooth and virtually impossible to stain. Additionally, they possess a subtle charm...</description>
+        <color>(0.65, 0.66, 0.65)</color>
+        <holdSnowOrSand>false</holdSnowOrSand>
+        <filthAcceptanceMask>
+            <li>None</li>
+        </filthAcceptanceMask>
+        <statBases>
+            <WorkToBuild>3700</WorkToBuild>
+            <Beauty>2</Beauty>
+            <Cleanliness>0.6</Cleanliness>
+            <CleaningTimeFactor>0.1</CleaningTimeFactor>
+            <FilthMultiplier>0.01</FilthMultiplier>
+        </statBases>
+        <color>(189,189,189)</color>
+        <costList>
+            <BlockCompositeStone>4</BlockCompositeStone>
+            <Steel>2</Steel>
+            <Silver>8</Silver>
+        </costList>
+        <pathCost>0</pathCost>
+        <tags MayRequire="ludeon.rimworld.royalty">
+            <li>FineFloor</li>
+        </tags>
+    </TerrainDef>
 </Defs>

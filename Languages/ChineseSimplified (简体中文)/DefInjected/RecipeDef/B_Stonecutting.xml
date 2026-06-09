@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  
+  <!-- EN: Composite stone processing -->
+  <MakeCompositeStone.label>加工复合石材</MakeCompositeStone.label>
+  <!-- EN: You can cut all the big stones into Composite stones. -->
+  <MakeCompositeStone.description>能将任意的大块石头切割成复合的石材.</MakeCompositeStone.description>
+  <!-- EN: 石块 -->
+  <MakeCompositeStone.ingredients.0.filter.customSummary>石块</MakeCompositeStone.ingredients.0.filter.customSummary>
+  <!-- EN: Composite stone processing. -->
+  <MakeCompositeStone.jobString>正在加工复合石材。</MakeCompositeStone.jobString>
+  
+  <!-- EN: Composite stone processing(Batch) -->
+  <MakeCompositeStoneB.label>批量加工复合石材(×3)</MakeCompositeStoneB.label>
+  <!-- EN: You can cut all the big stones into Composite stones. -->
+  <MakeCompositeStoneB.description>批量加工复合石材</MakeCompositeStoneB.description>
+  <!-- EN: 石块 -->
+  <MakeCompositeStoneB.ingredients.0.filter.customSummary>石块</MakeCompositeStoneB.ingredients.0.filter.customSummary>
+  <!-- EN: Composite stone processing. -->
+  <MakeCompositeStoneB.jobString>正在加工复合石材。</MakeCompositeStoneB.jobString>
+  
+  <!-- EN: Composite stone processing(Delicate) -->
+  <MakeCompositeStoneD.label>加工复合石材(精致)</MakeCompositeStoneD.label>
+  <!-- EN: You can cut all the big stones into Composite stones. -->
+  <MakeCompositeStoneD.description>能将任意的大块石头切割成复合的石材,切割速度降低,产量提升.</MakeCompositeStoneD.description>
+  <!-- EN: 石块 -->
+  <MakeCompositeStoneD.ingredients.0.filter.customSummary>石块</MakeCompositeStoneD.ingredients.0.filter.customSummary>
+  <!-- EN: Composite stone processing. -->
+  <MakeCompositeStoneD.jobString>正在加工复合石材。</MakeCompositeStoneD.jobString>
+  
+  <!-- EN: Composite stone processing(Delicate and Batch) -->
+  <MakeCompositeStoneDB.label>批量加工复合石材(×3 精致)</MakeCompositeStoneDB.label>
+  <!-- EN: You can cut all the big stones into Composite stones. -->
+  <MakeCompositeStoneDB.description>慢工出细活</MakeCompositeStoneDB.description>
+  <!-- EN: 石块 -->
+  <MakeCompositeStoneDB.ingredients.0.filter.customSummary>石块</MakeCompositeStoneDB.ingredients.0.filter.customSummary>
+  <!-- EN: Composite stone processing. -->
+  <MakeCompositeStoneDB.jobString>正在加工复合石材。</MakeCompositeStoneDB.jobString>
+  
+  <!-- EN: Composite stone processing(Fast and Batch) -->
+  <MakeCompositeStoneFB.label>批量加工复合石材(×3 快速)</MakeCompositeStoneFB.label>
+  <!-- EN: You can cut all the big stones into Composite stones. -->
+  <MakeCompositeStoneFB.description>快速切割，但代价成品相较偏少。</MakeCompositeStoneFB.description>
+  <!-- EN: 石块 -->
+  <MakeCompositeStoneFB.ingredients.0.filter.customSummary>石块</MakeCompositeStoneFB.ingredients.0.filter.customSummary>
+  <!-- EN: Composite stone processing. -->
+  <MakeCompositeStoneFB.jobString>正在加工复合石材。</MakeCompositeStoneFB.jobString>
+  
+  <!-- EN: Composite stone processing(Master) -->
+  <MakeCompositeStoneM.label>批量加工复合石材(×3 完美)</MakeCompositeStoneM.label>
+  <!-- EN: You can cut all the big stones into Composite stones. -->
+  <MakeCompositeStoneM.description>鱼和熊掌，皆在我手。</MakeCompositeStoneM.description>
+  <!-- EN: 石块 -->
+  <MakeCompositeStoneM.ingredients.0.filter.customSummary>石块</MakeCompositeStoneM.ingredients.0.filter.customSummary>
+  <!-- EN: Composite stone processing. -->
+  <MakeCompositeStoneM.jobString>正在加工复合石材。</MakeCompositeStoneM.jobString>
+  
+  <!-- EN: Composite stone processing(Fast) -->
+  <MakeCompositeStoneS.label>加工复合石材(快速)</MakeCompositeStoneS.label>
+  <!-- EN: You can cut all the big stones into Composite stones. -->
+  <MakeCompositeStoneS.description>能将任意的大块石头切割成复合的石材,切割速度提升,产量降低.</MakeCompositeStoneS.description>
+  <!-- EN: 石块 -->
+  <MakeCompositeStoneS.ingredients.0.filter.customSummary>石块</MakeCompositeStoneS.ingredients.0.filter.customSummary>
+  <!-- EN: Composite stone processing. -->
+  <MakeCompositeStoneS.jobString>正在加工复合石材。</MakeCompositeStoneS.jobString>
+  
+</LanguageData>

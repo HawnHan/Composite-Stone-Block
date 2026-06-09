@@ -4,7 +4,8 @@
   <TileCompositeStone.label>复合石材地板</TileCompositeStone.label>
   <FlagCompositeStone.label>复合石材石板</FlagCompositeStone.label>
   <FineTileCompositeBlock.label>精致复合石材地砖</FineTileCompositeBlock.label>
-
+  <CleanCompositeStone.label>复合洁净地砖</CleanCompositeStone.label>
+  <CleanCompositeStone.description>掺银复合石材地砖，表面光滑至极，连灰尘都无法附着。莫名地好看...</CleanCompositeStone.description>
 
   <!--<TileCompositeStone.description>粗糙切割的岩石地砖。不太好看，但非常适合铺设道路和室外的走道。拆除石板无法回收资源。</TileCompositeStone.description>-->
   <!--<FlagCompositeStone.description>坚固的石质地砖给人以城堡一样的感觉。看起来很漂亮，就是铺设速度较慢。</FlagCompositeStone.description>-->
