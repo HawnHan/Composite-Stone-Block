@@ -1,0 +1,10 @@
+<LanguageData>
+  <CompositeStoneProcessing.label>复合石料自动加工</CompositeStoneProcessing.label>
+  <CompositeStoneProcessing.description>研发一种自动化石料加工站，可自动将石块加工为复合石材。</CompositeStoneProcessing.description>
+  <CompositeStoneUpgradeMK1.label>加工站升级MK1</CompositeStoneUpgradeMK1.label>
+  <CompositeStoneUpgradeMK1.description>在加工站中安装第1级升级模块，处理速度提升至等效手工技能10级。</CompositeStoneUpgradeMK1.description>
+  <CompositeStoneUpgradeMK2.label>加工站升级MK2</CompositeStoneUpgradeMK2.label>
+  <CompositeStoneUpgradeMK2.description>在加工站中安装第2级升级模块（需先安装MK1），处理速度提升至等效手工技能15级。</CompositeStoneUpgradeMK2.description>
+  <CompositeStoneUpgradeMK3.label>加工站升级MK3</CompositeStoneUpgradeMK3.label>
+  <CompositeStoneUpgradeMK3.description>在加工站中安装第3级升级模块（需先安装MK1+MK2），处理速度提升至等效手工技能20级。</CompositeStoneUpgradeMK3.description>
+</LanguageData>

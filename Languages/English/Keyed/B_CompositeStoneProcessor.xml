@@ -1,0 +1,56 @@
+﻿<LanguageData>
+  <CompositeStoneProcessor_UpgradeInstalled>Upgrade installed.</CompositeStoneProcessor_UpgradeInstalled>
+  <UpgradeRequestedMsg>Installation requested for {0}.</UpgradeRequestedMsg>
+  <UnloadNoSpace>No empty space nearby to unload.</UnloadNoSpace>
+
+  <SkillRequirementLetterLabel>Processor level insufficient</SkillRequirementLetterLabel>
+  <SkillRequirementLetterDesc>{0}: need skill {1}, current equivalent {2}.</SkillRequirementLetterDesc>
+
+  <AlertNeedChunks>Processor needs resources</AlertNeedChunks>
+  <AlertNeedPower>Processor needs power</AlertNeedPower>
+
+  <StorageStatus>Chunks: {0} / {1}</StorageStatus>
+  <ProcessingStatus>Processing: {0}%</ProcessingStatus>
+  <TempStatus>Temp: {0}°C (Efficiency {1}%)</TempStatus>
+  <SpeedStatus>Speed: {0}x (Skill {1})</SpeedStatus>
+  <PowerStatus>Power: {0}</PowerStatus>
+  <PowerElectric>Electricity</PowerElectric>
+  <PowerFuel>Fuel</PowerFuel>
+  <PowerNone>None</PowerNone>
+
+  <UnloadChunksLabel>Unload chunks</UnloadChunksLabel>
+  <UnloadChunksDesc>Eject all stored chunks to nearby cells.</UnloadChunksDesc>
+
+  <ModSetting_Heat>Generate heat while processing</ModSetting_Heat>
+  <ModSetting_Alert>Show resource shortage alerts</ModSetting_Alert>
+  <ModSetting_Interval>Processing interval: {0} ticks</ModSetting_Interval>
+  <ButterPlusPlusNote>Fully compatible with performance mods like Butter++. No extra setup needed.</ButterPlusPlusNote>
+
+  <NoUpgradesAvailable>No upgrades available</NoUpgradesAvailable>
+  <TabUpgradesLabel>Upgrades</TabUpgradesLabel>
+  <UpgradeCostLabel>Cost:</UpgradeCostLabel>
+  <UpgradeStatusLabel>Status:</UpgradeStatusLabel>
+  <InstallButton>Install</InstallButton>
+  <UpgradingButtonLabel>Installing</UpgradingButtonLabel>
+  <InstalledStatus>Installed</InstalledStatus>
+  <RequiresResearchStatus>Research required: {0}</RequiresResearchStatus>
+  <WaitingForUpgradeStatus>Waiting for previous upgrade</WaitingForUpgradeStatus>
+  <DeliveringStatus>Delivering materials</DeliveringStatus>
+  <ReadyInstallStatus>Ready to install</ReadyInstallStatus>
+  <UpgradeLocked>Locked</UpgradeLocked>
+  <UpgradeReady>Install</UpgradeReady>
+  <UpgradeInstalling>Installing</UpgradeInstalling>
+  <UpgradeConfigured>Installed</UpgradeConfigured>
+  <SpeedInfo>Speed: +{0}x (Skill {1})</SpeedInfo>
+  <UpgradeNoCost>No cost</UpgradeNoCost>
+  <UnlockedRecipes>Unlocks:</UnlockedRecipes>
+  <ModSetting_BGColor>UI background color (hex): #{0}</ModSetting_BGColor>
+  <ModSetting_ChangeBG>Change color code</ModSetting_ChangeBG>
+  <ModSetting_Reset>Reset to defaults</ModSetting_Reset>
+  <UpgradeProgressStatus>Upgrading to level {0}: {1}%</UpgradeProgressStatus>
+  <DeliveryProgress>Delivery:</DeliveryProgress>
+  <ModSetting_DefaultFuel>Default fuel (no extension): {0}/60ticks</ModSetting_DefaultFuel>
+  <ModSetting_DefaultPower>Default power (no extension): {0}W</ModSetting_DefaultPower>
+  <FinalSpeedStatus>Final speed: {0}x (base {1}x × temp {2}%)</FinalSpeedStatus>
+  <ModSetting_DefaultSkillLevel>Default skill (recipe has none): {0}</ModSetting_DefaultSkillLevel>
+</LanguageData>
