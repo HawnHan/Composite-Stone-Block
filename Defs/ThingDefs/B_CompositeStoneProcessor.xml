@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThingDef ParentName="BuildingBase">
+    <defName>CompositeStoneProcessor</defName>
+    <label>Composite Stone Processor</label>
+    <description>Autonomous stone processing station. Haulers bring stone chunks to be processed into Composite Stone blocks. Install upgrades to boost speed. Powered by electricity or fuel.</description>
+    <thingClass>CompositeStoneProcessor.Building_CompositeStoneProcessor</thingClass>
+    <tickerType>Normal</tickerType>
+
+    <canOverlapZones>false</canOverlapZones>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+    <thingCategories>
+      <li>BuildingsProduction</li>
+    </thingCategories>
+    <noRightClickDraftAttack>true</noRightClickDraftAttack>
+
+    <graphicData>
+      <texPath>Things/Building/CompositeStoneProcessor</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1.5,1.5)</drawSize>
+    </graphicData>
+    <staticSunShadowHeight>0.5</staticSunShadowHeight>
+    <passability>Standable</passability>
+    <selectable>true</selectable>
+    <useHitPoints>true</useHitPoints>
+    <constructEffect>ConstructMetal</constructEffect>
+    <fillPercent>0.95</fillPercent>
+    <pathCost>55</pathCost>
+    <designationCategory>Production</designationCategory>
+    <altitudeLayer>Building</altitudeLayer>
+    <size>(1,1)</size>
+    <hasInteractionCell>true</hasInteractionCell>
+    <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+    <rotatable>true</rotatable>
+    <containedItemsSelectable>true</containedItemsSelectable>
+
+    <costList>
+      <Steel>120</Steel>
+      <ComponentIndustrial>4</ComponentIndustrial>
+      <BlockCompositeStone>15</BlockCompositeStone>
+    </costList>
+
+    <statBases>
+      <WorkToBuild>2200</WorkToBuild>
+      <MaxHitPoints>300</MaxHitPoints>
+      <Flammability>0.5</Flammability>
+      <Beauty>-8</Beauty>
+      <Mass>20</Mass>
+      <MarketValue>400</MarketValue>
+    </statBases>
+
+    <building>
+      <paintable>true</paintable>
+      <buildingTags>
+        <li>Production</li>
+      </buildingTags>
+    </building>
+
+    <placeWorkers>
+      <li>CompositeStoneProcessor.PlaceWorker_AllowStorageOnInteractionSpot</li>
+    </placeWorkers>
+
+    <comps>
+      <li Class="CompProperties_Refuelable">
+        <fuelCapacity>75</fuelCapacity>
+        <targetFuelLevelConfigurable>true</targetFuelLevelConfigurable>
+        <initialConfigurableTargetFuelLevel>75</initialConfigurableTargetFuelLevel>
+        <fuelFilter>
+          <thingDefs>
+            <li>Chemfuel</li>
+          <li>WoodLog</li>
+          </thingDefs>
+        </fuelFilter>
+        <consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
+        <showAllowAutoRefuelToggle>true</showAllowAutoRefuelToggle>
+        <autoRefuelPercent>0.2</autoRefuelPercent>
+        <showFuelGizmo>true</showFuelGizmo>
+        <fuelConsumptionRate>0.01</fuelConsumptionRate>
+        <drawOutOfFuelOverlay>false</drawOutOfFuelOverlay>
+      </li>
+      <li Class="CompProperties_Power">
+        <compClass>CompPowerTrader</compClass>
+        <basePowerConsumption>50</basePowerConsumption>
+      </li>
+      <li Class="CompProperties_HeatPusher">
+        <compClass>CompHeatPusherPowered</compClass>
+        <heatPerSecond>3</heatPerSecond>
+      </li>
+    </comps>
+
+    <inspectorTabs>
+      <li>ITab_Bills</li>
+      <li>ITab_Storage</li>
+      <li>CompositeStoneProcessor.ITab_Upgrades</li>
+    </inspectorTabs>
+
+    <researchPrerequisites>
+      <li>CompositeStoneProcessing</li>
+    </researchPrerequisites>
+  </ThingDef>
+</Defs>
+
+
+
+

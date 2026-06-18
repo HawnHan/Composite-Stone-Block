@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+	<ResearchProjectDef>
+		<defName>Fastcutting</defName>
+		<label>Fast cutting</label>
+		<techLevel>Medieval</techLevel>
+		<baseCost>600</baseCost>
+		<description>It can be more fast to cut a variety of blocks into Composite stone, but it will affect the production rate each time.</description>
+		<prerequisites>
+			<li>Stonecutting</li>
+		</prerequisites>
+		<tab>CompositeTechnology</tab>
+		<researchViewX>0</researchViewX>
+		<researchViewY>2</researchViewY>
+	</ResearchProjectDef>
+	
+	<ResearchProjectDef>
+		<defName>Delicatecutting</defName>
+		<label>Delicate cutting</label>
+		<techLevel>Medieval</techLevel>
+		<baseCost>600</baseCost>
+		<description>It can be more effective to cut a variety of blocks into Composite stone, but it will affect the operation time.</description>
+		<prerequisites>
+			<li>Stonecutting</li>
+		</prerequisites>
+		<tab>CompositeTechnology</tab>
+		<researchViewX>0</researchViewX>
+		<researchViewY>4</researchViewY>
+	</ResearchProjectDef>
+
+	<ResearchProjectDef>
+		<defName>FastcuttingB</defName>
+		<label>Fast cutting batch</label>
+		<techLevel>Medieval</techLevel>
+		<baseCost>1500</baseCost>
+		<description>It can be more fast to cut a variety batch of blocks into Composite stone, but it will affect the production rate each time.</description>
+		<prerequisites>
+			<li>Fastcutting</li>
+		</prerequisites>
+		<tab>CompositeTechnology</tab>
+		<researchViewX>1</researchViewX>
+		<researchViewY>2</researchViewY>
+	</ResearchProjectDef>
+
+	<ResearchProjectDef>
+		<defName>DelicatecuttingB</defName>
+		<label>Delicate cutting batch</label>
+		<techLevel>Medieval</techLevel>
+		<baseCost>1500</baseCost>
+		<description>It can be more effective to cut a variety batch of blocks into Composite stone, but it will affect the operation time.</description>
+		<prerequisites>
+			<li>Delicatecutting</li>
+		</prerequisites>
+		<tab>CompositeTechnology</tab>
+		<researchViewX>1</researchViewX>
+		<researchViewY>4</researchViewY>
+	</ResearchProjectDef>
+
+	<ResearchProjectDef>
+		<defName>Mastercutting</defName>
+		<label>Master cutting</label>
+		<techLevel>Medieval</techLevel>
+		<baseCost>3500</baseCost>
+		<description>It can be more effective to cut a variety batch of blocks into Composite stone, fast and more production.</description>
+		<prerequisites>
+			<li>FastcuttingB</li>
+			<li>DelicatecuttingB</li>
+		</prerequisites>
+		<tab>CompositeTechnology</tab>
+		<researchViewX>2</researchViewX>
+		<researchViewY>3</researchViewY>
+	</ResearchProjectDef>
+
+	<!-- New: Composite Stone Processor -->
+	<ResearchProjectDef>
+		<defName>CompositeStoneProcessing</defName>
+		<label>Composite stone processing</label>
+		<techLevel>Industrial</techLevel>
+		<baseCost>700</baseCost>
+		<description>Develop an autonomous stone processing station that automatically processes stone chunks into Composite Stone blocks.</description>
+		<prerequisites>
+			<li>Stonecutting</li>
+		</prerequisites>
+		<tab>CompositeTechnology</tab>
+		<researchViewX>0</researchViewX>
+		<researchViewY>6</researchViewY>
+	</ResearchProjectDef>
+
+	<ResearchProjectDef>
+		<defName>CompositeStoneUpgradeMK1</defName>
+		<label>Processor upgrade MK1</label>
+		<techLevel>Industrial</techLevel>
+		<baseCost>1200</baseCost>
+		<description>Install the first upgrade module into the processor. Equivalent to Crafting skill 10.</description>
+		<prerequisites>
+			<li>CompositeStoneProcessing</li>
+		</prerequisites>
+		<tab>CompositeTechnology</tab>
+		<researchViewX>1</researchViewX>
+		<researchViewY>6</researchViewY>
+	</ResearchProjectDef>
+
+	<ResearchProjectDef>
+		<defName>CompositeStoneUpgradeMK2</defName>
+		<label>Processor upgrade MK2</label>
+		<techLevel>Industrial</techLevel>
+		<baseCost>2200</baseCost>
+		<description>Install the second upgrade module (requires MK1). Equivalent to Crafting skill 15.</description>
+		<prerequisites>
+			<li>CompositeStoneUpgradeMK1</li>
+		</prerequisites>
+		<tab>CompositeTechnology</tab>
+		<researchViewX>2</researchViewX>
+		<researchViewY>6</researchViewY>
+	</ResearchProjectDef>
+
+	<ResearchProjectDef>
+		<defName>CompositeStoneUpgradeMK3</defName>
+		<label>Processor upgrade MK3</label>
+		<techLevel>Industrial</techLevel>
+		<baseCost>3500</baseCost>
+		<description>Install the final upgrade module (requires MK1+MK2). Equivalent to Crafting skill 20.</description>
+		<prerequisites>
+			<li>CompositeStoneUpgradeMK2</li>
+		</prerequisites>
+		<tab>CompositeTechnology</tab>
+		<researchViewX>3</researchViewX>
+		<researchViewY>6</researchViewY>
+	</ResearchProjectDef>
+</Defs>

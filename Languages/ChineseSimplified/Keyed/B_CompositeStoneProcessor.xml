@@ -1,0 +1,56 @@
+﻿<LanguageData>
+  <CompositeStoneProcessor_UpgradeInstalled>已安装加工站第{0}级升级。</CompositeStoneProcessor_UpgradeInstalled>
+  <UpgradeRequestedMsg>已请求安装第{0}级升级。</UpgradeRequestedMsg>
+  <UnloadNoSpace>附近没有空余空间可供卸载。</UnloadNoSpace>
+
+  <SkillRequirementLetterLabel>加工站等级不足</SkillRequirementLetterLabel>
+  <SkillRequirementLetterDesc>{0} 的加工等级不足（当前等效{2}级，需要{1}级），无法执行当前清单。</SkillRequirementLetterDesc>
+
+  <AlertNeedChunks>加工站缺少原料</AlertNeedChunks>
+  <AlertNeedPower>加工站缺少能源</AlertNeedPower>
+
+  <StorageStatus>石块：{0} / {1}</StorageStatus>
+  <ProcessingStatus>加工进度：{0}%</ProcessingStatus>
+  <TempStatus>温度：{0}°C（效率 {1}%）</TempStatus>
+  <SpeedStatus>速度系数：{0}x（等效手工技能{1}级）</SpeedStatus>
+  <PowerStatus>能源：{0}</PowerStatus>
+  <PowerElectric>电力</PowerElectric>
+  <PowerFuel>燃料</PowerFuel>
+  <PowerNone>无</PowerNone>
+
+  <UnloadChunksLabel>卸载石块</UnloadChunksLabel>
+  <UnloadChunksDesc>将所有储存的石块弹出到附近空地。</UnloadChunksDesc>
+
+  <ModSetting_Heat>加工时产生热能</ModSetting_Heat>
+  <ModSetting_Alert>显示资源不足提醒</ModSetting_Alert>
+  <ModSetting_Interval>加工间隔：{0} tick</ModSetting_Interval>
+  <ButterPlusPlusNote>本模组完全兼容 Butter++ 等性能优化模组，无需额外设置。</ButterPlusPlusNote>
+
+  <NoUpgradesAvailable>当前没有可用升级模块</NoUpgradesAvailable>
+  <TabUpgradesLabel>升级界面</TabUpgradesLabel>
+  <UpgradeCostLabel>消耗：</UpgradeCostLabel>
+  <UpgradeStatusLabel>状态：</UpgradeStatusLabel>
+  <InstallButton>安装</InstallButton>
+  <UpgradingButtonLabel>升级中</UpgradingButtonLabel>
+  <InstalledStatus>已安装</InstalledStatus>
+  <RequiresResearchStatus>需要研究：{0}</RequiresResearchStatus>
+  <WaitingForUpgradeStatus>等待前级升级完成</WaitingForUpgradeStatus>
+  <DeliveringStatus>物资运送中</DeliveringStatus>
+  <ReadyInstallStatus>可安装</ReadyInstallStatus>
+  <UpgradeLocked>未解锁</UpgradeLocked>
+  <UpgradeReady>未配置</UpgradeReady>
+  <UpgradeInstalling>配置中</UpgradeInstalling>
+  <UpgradeConfigured>已配置</UpgradeConfigured>
+  <SpeedInfo>速度系数：+{0}x（技能{1}级）</SpeedInfo>
+  <UpgradeNoCost>无消耗</UpgradeNoCost>
+  <UnlockedRecipes>解锁清单：</UnlockedRecipes>
+  <ModSetting_BGColor>升级界面底色（十六进制）：#{0}</ModSetting_BGColor>
+  <ModSetting_ChangeBG>修改底色代码</ModSetting_ChangeBG>
+  <ModSetting_Reset>重置为默认设置</ModSetting_Reset>
+  <UpgradeProgressStatus>正在升级为{0}级别：{1}%</UpgradeProgressStatus>
+  <DeliveryProgress>运送进度：</DeliveryProgress>
+  <ModSetting_DefaultFuel>默认燃料消耗（无扩展时）：{0}/60tick</ModSetting_DefaultFuel>
+  <ModSetting_DefaultPower>默认加工功率（无扩展时）：{0}W</ModSetting_DefaultPower>
+  <FinalSpeedStatus>最终速度：{0}x（速度系数{1}x × 温度效率{2}%）</FinalSpeedStatus>
+  <ModSetting_DefaultSkillLevel>默认技能等级（清单无要求时）：{0}</ModSetting_DefaultSkillLevel>
+</LanguageData>

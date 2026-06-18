@@ -1,0 +1,16 @@
+<LanguageData>
+  <MakeCompositeStoneAuto.label>加工复合石材</MakeCompositeStoneAuto.label>
+  <MakeCompositeStoneAuto.description>将1块大块石头加工成20份复合石材。</MakeCompositeStoneAuto.description>
+  <MakeCompositeStoneAutoS.label>加工复合石材（快速）</MakeCompositeStoneAutoS.label>
+  <MakeCompositeStoneAutoS.description>将1块大块石头加工成15份复合石材，速度提升，产量降低。</MakeCompositeStoneAutoS.description>
+  <MakeCompositeStoneAutoD.label>加工复合石材（精致）</MakeCompositeStoneAutoD.label>
+  <MakeCompositeStoneAutoD.description>将1块大块石头加工成25份复合石材，速度降低，产量提升。</MakeCompositeStoneAutoD.description>
+  <MakeCompositeStoneAutoB.label>批量加工复合石材</MakeCompositeStoneAutoB.label>
+  <MakeCompositeStoneAutoB.description>将3块大块石头加工成45份复合石材。</MakeCompositeStoneAutoB.description>
+  <MakeCompositeStoneAutoFB.label>快速批量加工复合石材</MakeCompositeStoneAutoFB.label>
+  <MakeCompositeStoneAutoFB.description>将3块大块石头加工成45份复合石材，速度提升，产量降低。</MakeCompositeStoneAutoFB.description>
+  <MakeCompositeStoneAutoDB.label>精致批量加工复合石材</MakeCompositeStoneAutoDB.label>
+  <MakeCompositeStoneAutoDB.description>将3块大块石头加工成75份复合石材，速度降低，产量提升。</MakeCompositeStoneAutoDB.description>
+  <MakeCompositeStoneAutoM.label>大师级加工复合石材</MakeCompositeStoneAutoM.label>
+  <MakeCompositeStoneAutoM.description>将3块大块石头加工成75份复合石材，速度与产量的完美平衡。</MakeCompositeStoneAutoM.description>
+</LanguageData>
