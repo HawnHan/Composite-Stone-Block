@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <WorkGiverDef>
+    <defName>DeliverResourcesToProcessor</defName>
+    <label>deliver resources to processor upgrade</label>
+    <giverClass>CompositeStoneProcessor.WorkGiver_UpgradeHaul</giverClass>
+    <workType>Hauling</workType>
+    <priorityInType>8</priorityInType>
+    <verb>deliver to</verb>
+    <gerund>delivering to</gerund>
+    <requiredCapacities>
+      <li>Manipulation</li>
+    </requiredCapacities>
+  </WorkGiverDef>
+</Defs>

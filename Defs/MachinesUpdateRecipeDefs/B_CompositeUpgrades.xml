@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <RecipeDef>
+    <defName>CSP_UpgradeMK1</defName>
+    <label>MK1 Speed Module</label>
+    <description>Basic speed enhancement module. Equivalent to Crafting skill 10.</description>
+    <workAmount>2000</workAmount>
+    <researchPrerequisite>CompositeStoneUpgradeMK1</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>50</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>ComponentIndustrial</li>
+          </thingDefs>
+        </filter>
+        <count>3</count>
+      </li>
+    </ingredients>
+    <modExtensions>
+      <li Class="CompositeStoneProcessor.MachineUpdateRecipeExtension">
+        <speedUp>0.35</speedUp>
+        <sortOrder>10</sortOrder>
+        <skillLevel>10</skillLevel>
+      </li>
+    </modExtensions>
+  </RecipeDef>
+
+  <RecipeDef>
+    <defName>CSP_UpgradeMK2</defName>
+    <label>MK2 Speed Module</label>
+    <description>Advanced speed enhancement module. Requires MK1. Equivalent to Crafting skill 15.</description>
+    <workAmount>2000</workAmount>
+    <researchPrerequisite>CompositeStoneUpgradeMK2</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>80</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>ComponentIndustrial</li>
+          </thingDefs>
+        </filter>
+        <count>6</count>
+      </li>
+    </ingredients>
+    <modExtensions>
+      <li Class="CompositeStoneProcessor.MachineUpdateRecipeExtension">
+        <speedUp>0.40</speedUp>
+        <sortOrder>20</sortOrder>
+        <skillLevel>15</skillLevel>
+      </li>
+    </modExtensions>
+  </RecipeDef>
+
+  <RecipeDef>
+    <defName>CSP_UpgradeMK3</defName>
+    <label>MK3 Speed Module</label>
+    <description>Maximum speed enhancement module. Requires MK1+MK2. Equivalent to Crafting skill 20.</description>
+    <workAmount>2000</workAmount>
+    <researchPrerequisite>CompositeStoneUpgradeMK3</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Steel</li>
+          </thingDefs>
+        </filter>
+        <count>120</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>ComponentIndustrial</li>
+          </thingDefs>
+        </filter>
+        <count>10</count>
+      </li>
+    </ingredients>
+    <modExtensions>
+      <li Class="CompositeStoneProcessor.MachineUpdateRecipeExtension">
+        <speedUp>0.50</speedUp>
+        <sortOrder>30</sortOrder>
+        <skillLevel>20</skillLevel>
+      </li>
+    </modExtensions>
+  </RecipeDef>
+</Defs>
