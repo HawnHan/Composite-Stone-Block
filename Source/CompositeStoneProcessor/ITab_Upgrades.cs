@@ -29,22 +29,20 @@ namespace CompositeStoneProcessor
 
             Color bg = CompositeStoneProcessorMod.settings.BgColor;
             Color boxBg = new Color(bg.r * 0.8f, bg.g * 0.8f, bg.b * 0.8f);
-
             float boxWidth = this.size.x - 28f;
 
             float totalSpeed = p.TotalSpeed;
             float tempFactor = p.GetTempFactor();
             float finalSpeed = totalSpeed * tempFactor;
-            
             string h1 = "FinalSpeedStatus".Translate(finalSpeed.ToString("F2"), totalSpeed.ToString("F2"), (tempFactor * 100f).ToString("F0"));
-            
+            string hSkill = "SpeedStatus".Translate(totalSpeed.ToString("F2"), p.EffectiveSkill);
 
             Text.Font = GameFont.Medium;
             float headerTitleH = 28f;
             Text.Font = GameFont.Small;
             float h1H = Text.CalcHeight(h1, boxWidth);
-                        float headerH = headerTitleH + h1H + 8f;
-            float headerBoxH = headerH - 4f;
+            float hSkillH = Text.CalcHeight(hSkill, boxWidth);
+            float headerH = headerTitleH + h1H + 4f + hSkillH + 8f;
 
             float[] boxHs = new float[all.Count];
             float totalH = headerH + 10f;
@@ -67,8 +65,25 @@ namespace CompositeStoneProcessor
                     foreach (var r in d.GetExt()?.unlockRecipe) ul += r.LabelCap + " ";
                     thirdLine = ul;
                 }
+                else if (st == UState.Installing && p.PendingUpgradeResources != null && p.PendingUpgradeResources.Count > 0)
+                {
+                    string prog = "DeliveryProgress".Translate() + " ";
+                    foreach (var o in d.ingredients)
+                    {
+                        int total = (int)o.GetBaseCount();
+                        ThingDef oDef = o.filter?.AnyAllowedDef;
+                        int remaining = total;
+                        if (oDef != null)
+                        {
+                            for (int j = 0; j < p.PendingUpgradeResources.Count; j++)
+                                if (p.PendingUpgradeResources[j].thingDef == oDef)
+                                { remaining = p.PendingUpgradeResources[j].count; break; }
+                            prog += oDef.LabelCap + " " + (total - remaining) + "/" + total + " ";
+                        }
+                    }
+                    thirdLine = prog;
+                }
                 float thirdH = (thirdLine.Length > 0) ? Text.CalcHeight(thirdLine, boxWidth) : 0f;
-
                 float h = 34f + costH + 4f + speedH + 4f + thirdH + 4f;
                 boxHs[i] = h;
                 totalH += h + 6f;
@@ -85,7 +100,7 @@ namespace CompositeStoneProcessor
             float y = 2f;
 
             Text.Font = GameFont.Medium;
-            GUI.color = Color.white;
+            float headerBoxH = headerH - 4f;
             GUI.color = boxBg;
             GUI.DrawTexture(new Rect(2f, y, view.width - 4f, headerBoxH), BaseContent.WhiteTex);
             GUI.color = CBorder;
@@ -96,8 +111,9 @@ namespace CompositeStoneProcessor
 
             Text.Font = GameFont.Small;
             Widgets.Label(new Rect(10f, y, view.width - 20f, h1H), h1);
-            
-            y += h1H + 8f;
+            y += h1H + 4f;
+            Widgets.Label(new Rect(10f, y, view.width - 20f, hSkillH), hSkill);
+            y += hSkillH + 8f;
 
             Text.Font = GameFont.Medium;
             Widgets.Label(new Rect(4f, y, view.width, 24f), "ConfigurableComponentsLabel".Translate());
@@ -147,7 +163,7 @@ namespace CompositeStoneProcessor
                 Widgets.DrawLineHorizontal(8f, y + 32f, view.width - 20f);
                 GUI.color = tc;
 
-                // Fully dynamic content layout using Text.CalcHeight
+                // Dynamic content
                 float dy = y + 34f;
 
                 string cs2 = GetCost(d);

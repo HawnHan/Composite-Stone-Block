@@ -271,7 +271,8 @@ namespace CompositeStoneProcessor
                     int req = (bill.recipe.skillRequirements.NullOrEmpty())
                         ? CompositeStoneProcessorMod.settings.defaultSkillLevel
                         : bill.recipe.skillRequirements[0].minLevel;
-                    return bill;
+                    if (EffectiveSkill >= req)
+                        return bill;
                 }
             }
             return null;
@@ -444,6 +445,12 @@ namespace CompositeStoneProcessor
             int cellIdx = 0;
             for (int i = innerContainer.Count - 1; i >= 0 && cellIdx < cells.Count; i--)
             { Thing t = innerContainer[i]; if (t.def.thingCategories?.Contains(ThingCategoryDefOf.StoneChunks) == true) { Thing split = t.SplitOff(t.stackCount); innerContainer.Remove(split); GenSpawn.Spawn(split, cells[cellIdx], Map); cellIdx++; } }
+        }
+
+        public override void DrawGUIOverlay()
+        {
+            if (refuelableComp != null && refuelableComp.HasFuel) return;
+            base.DrawGUIOverlay();
         }
 
         public override string GetInspectString()
