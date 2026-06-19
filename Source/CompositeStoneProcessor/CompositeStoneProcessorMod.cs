@@ -31,6 +31,12 @@ namespace CompositeStoneProcessor
             list.Label("ModSetting_Interval".Translate(interval));
             interval = Mathf.RoundToInt(list.Slider(interval, 60f, 1000f) / 10f) * 10;
             settings.tickInterval = interval;
+            list.Gap(2f);
+            GUI.color = Color.gray;
+            Text.Font = GameFont.Tiny;
+            list.Label("ModSetting_IntervalNote".Translate());
+            Text.Font = GameFont.Small;
+            GUI.color = Color.white;
             list.Gap(6f);
 
             list.Label("ModSetting_BGColor".Translate(settings.bgColorHex));

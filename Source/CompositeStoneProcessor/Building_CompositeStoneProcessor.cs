@@ -33,7 +33,7 @@ namespace CompositeStoneProcessor
             if (thing == null) return;
             if (thing.def.thingCategories?.Contains(ThingCategoryDefOf.StoneChunks) == true)
                 AbsorbChunk(thing);
-            if (!pendingUpgradeResources.NullOrEmpty())
+            if (pendingUpgradeResources != null && pendingUpgradeResources.Count > 0)
                 TryAcceptUpgradeResource(thing);
         }
 
@@ -60,8 +60,8 @@ namespace CompositeStoneProcessor
 
         private List<RecipeDef> installedUpgrades = new List<RecipeDef>();
         public List<RecipeDef> InstalledUpgrades => installedUpgrades;
-        public float TotalSpeed => 1.0f + installedUpgrades.DefaultIfEmpty().Sum(u => u.GetExt()?.speedUp ?? 0f);
-        public int EffectiveSkill => Mathf.Max(CompositeStoneProcessorMod.settings.defaultSkillLevel, installedUpgrades.DefaultIfEmpty().Max(u => u.GetExt()?.skillLevel ?? 0));
+        public float TotalSpeed => 1.0f + installedUpgrades.DefaultIfEmpty().Sum(u => u?.GetExt()?.speedUp ?? 0f);
+        public int EffectiveSkill => Mathf.Max(CompositeStoneProcessorMod.settings.defaultSkillLevel, installedUpgrades.DefaultIfEmpty().Max(u => u?.GetExt()?.skillLevel ?? 0));
 
         private CompRefuelable refuelableComp;
         private CompPowerTrader powerComp;
@@ -83,10 +83,10 @@ namespace CompositeStoneProcessor
         private int currentIngredientCount;
         private const int MAX_CHUNKS = 30;
 
-        private RecipeDef pendingUpgradeDef;
+        private List<RecipeDef> pendingUpgradeQueue = new List<RecipeDef>();
         private List<ThingDefCountClass> pendingUpgradeResources;
         private int upgradeProgressTicks;
-        
+
         public override void PostMake() { base.PostMake(); InitStorage(); }
         public override void SpawnSetup(Map map, bool respawningAfterLoad)
         {
@@ -113,8 +113,18 @@ namespace CompositeStoneProcessor
         }
         public override void DeSpawn(DestroyMode mode = DestroyMode.Vanish)
         {
+            if (Spawned && innerContainer != null && innerContainer.Count > 0)
+            {
+                for (int i = innerContainer.Count - 1; i >= 0; i--)
+                {
+                    Thing t = innerContainer[i];
+                    Thing split = t.SplitOff(t.stackCount);
+                    innerContainer.Remove(split);
+                    GenPlace.TryPlaceThing(split, Position, Map, ThingPlaceMode.Near);
+                }
+            }
             slotGroup = null;
-            pendingUpgradeDef = null;
+            pendingUpgradeQueue.Clear();
             pendingUpgradeResources = null;
             base.DeSpawn(mode);
         }
@@ -129,7 +139,7 @@ namespace CompositeStoneProcessor
             Scribe_Values.Look(ref isProcessing, "isProcessing", false);
             Scribe_Defs.Look(ref currentRecipe, "currentRecipe");
             Scribe_Values.Look(ref currentIngredientCount, "currentIngredientCount", 0);
-            Scribe_Defs.Look(ref pendingUpgradeDef, "pendingUpgradeDef");
+            Scribe_Collections.Look(ref pendingUpgradeQueue, "pendingUpgradeQueue", LookMode.Def);
             Scribe_Values.Look(ref upgradeProgressTicks, "upgradeProgressTicks", 0);
             Scribe_Collections.Look(ref pendingUpgradeResources, "pendingUpgradeResources", LookMode.Deep);
         }
@@ -141,17 +151,15 @@ namespace CompositeStoneProcessor
             int ti = ProcTickInterval;
             if (ti <= 0) return;
 
-            // Upgrade resources collected -> start timer
-            if (pendingUpgradeDef != null && upgradeProgressTicks < 0 && (pendingUpgradeResources == null || pendingUpgradeResources.Count == 0))
+            if (pendingUpgradeQueue.Count > 0 && upgradeProgressTicks < 0 && (pendingUpgradeResources == null || pendingUpgradeResources.Count == 0))
                 upgradeProgressTicks = 0;
 
-            // Upgrade progress
-            if (pendingUpgradeDef != null && upgradeProgressTicks >= 0 && upgradeProgressTicks < (int)pendingUpgradeDef.workAmount && this.IsHashIntervalTick(ti))
+            if (pendingUpgradeQueue.Count > 0 && upgradeProgressTicks >= 0 && upgradeProgressTicks < (int)pendingUpgradeQueue[0].workAmount && this.IsHashIntervalTick(ti))
             {
                 if (powerComp != null && powerComp.PowerOn || (refuelableComp != null && refuelableComp.HasFuel))
                 {
                     upgradeProgressTicks += Mathf.RoundToInt(ti * 0.5f);
-                    if (upgradeProgressTicks >= (int)pendingUpgradeDef.workAmount) CompleteUpgrade();
+                    if (upgradeProgressTicks >= (int)pendingUpgradeQueue[0].workAmount) CompleteUpgrade();
                 }
             }
 
@@ -161,18 +169,25 @@ namespace CompositeStoneProcessor
 
             if (!isProcessing)
             {
-                if (FindBill() != null && HasIngredient()) StartProcessing();
-                else { SetPowerConsumption(0); }
+                if (this.IsHashIntervalTick(ProcTickInterval))
+                {
+                    Bill_Production candidate = FindBill();
+                    if (candidate != null && HasIngredient(candidate))
+                    {
+                        currentRecipe = candidate.recipe;
+                        currentIngredientCount = (currentRecipe.ingredients.NullOrEmpty() ? 0 : (int)currentRecipe.ingredients[0].GetBaseCount());
+                        progressTicks = 0; displayProgressPct = 0; isProcessing = true;
+                    }
+                }
+                if (!isProcessing) { SetPowerConsumption(0); }
                 return;
             }
             if (!this.IsHashIntervalTick(ti)) return;
             if (currentRecipe == null || !BillStillActive()) { SetPowerConsumption(0); CancelProcessing(); return; }
 
-
             float tf = GetTempFactor();
             if (tf <= 0f) { SetPowerConsumption(0); CancelProcessing(); return; }
 
-            // Fuel/power from recipe extension
             MachineRecipeExtension ext = currentRecipe.GetModExtension<MachineRecipeExtension>();
             if (ext != null)
             {
@@ -185,7 +200,11 @@ namespace CompositeStoneProcessor
             }
             else
             {
-                if (!hp && hf) refuelableComp.ConsumeFuel(Mathf.Max(1, Mathf.RoundToInt(CompositeStoneProcessorMod.settings.defaultFuelRate)));
+                if (!hp && hf)
+                {
+                    refuelableComp.ConsumeFuel(Mathf.Max(1, Mathf.RoundToInt(CompositeStoneProcessorMod.settings.defaultFuelRate)));
+                    GenTemperature.PushHeat(Position, Map, 0.05f);
+                }
                 SetPowerConsumption(hp ? CompositeStoneProcessorMod.settings.defaultPowerConsume : 0);
             }
 
@@ -199,15 +218,8 @@ namespace CompositeStoneProcessor
         {
             if (powerComp != null)
             {
-                bool hasFuel = refuelableComp != null && refuelableComp.HasFuel;
                 bool onGrid = powerComp.PowerNet != null;
-                int target;
-                if (extra > 0 && (onGrid || hasFuel))
-                    target = -(50 + extra);
-                else if (onGrid)
-                    target = -50;
-                else
-                    target = 0;
+                int target = onGrid ? -(50 + extra) : 0;
                 if (powerComp.PowerOutput != target) powerComp.PowerOutput = target;
             }
         }
@@ -256,8 +268,6 @@ namespace CompositeStoneProcessor
             {
                 if (billStack[i] is Bill_Production bill && bill.ShouldDoNow())
                 {
-                    // 加工站自动加工，无视原版手工技能限制
-                    // 清单无 skillRequirements 时使用 Mod 设定的默认等级（仅用于兼容后续 Patch 添加的清单）
                     int req = (bill.recipe.skillRequirements.NullOrEmpty())
                         ? CompositeStoneProcessorMod.settings.defaultSkillLevel
                         : bill.recipe.skillRequirements[0].minLevel;
@@ -266,30 +276,26 @@ namespace CompositeStoneProcessor
             }
             return null;
         }
-        private bool HasIngredient()
+        private bool HasIngredient(Bill_Production bill)
         {
-            Bill_Production bill = FindBill();
             if (bill?.recipe == null) return false;
             int req = bill.recipe.ingredients.NullOrEmpty() ? 0 : (int)bill.recipe.ingredients[0].GetBaseCount();
             return CountIngredient(bill.recipe) >= req;
-        }
-        private void StartProcessing()
-        {
-            Bill_Production bill = FindBill();
-            if (bill == null) return;
-            currentRecipe = bill.recipe;
-            currentIngredientCount = (currentRecipe.ingredients?.Count > 0) ? (int)currentRecipe.ingredients[0].GetBaseCount() : 0;
-            progressTicks = 0; displayProgressPct = 0; isProcessing = true;
         }
         private void CompleteProcessing()
         {
             if (currentRecipe == null) { SetPowerConsumption(0); CancelProcessing(); return; }
             int rem = currentIngredientCount;
-            for (int i = innerContainer.Count - 1; i >= 0 && rem > 0; i--)
+            var candidates = new List<Thing>();
+            for (int i = 0; i < innerContainer.Count; i++)
+                if (currentRecipe.fixedIngredientFilter.Allows(innerContainer[i].def))
+                    candidates.Add(innerContainer[i]);
+            for (int i = candidates.Count - 1; i >= 0 && rem > 0; i--)
             {
-                Thing t = innerContainer[i];
-                if (currentRecipe.fixedIngredientFilter.Allows(t.def))
-                { int take = Math.Min(rem, t.stackCount); Thing split = t.SplitOff(take); innerContainer.Remove(split); split.Destroy(DestroyMode.Vanish); rem -= take; }
+                Thing t = candidates[i];
+                int take = Math.Min(rem, t.stackCount);
+                Thing split = t.SplitOff(take); innerContainer.Remove(split); split.Destroy(DestroyMode.Vanish);
+                rem -= take;
             }
             if (currentRecipe.products != null)
                 foreach (var prod in currentRecipe.products)
@@ -302,7 +308,6 @@ namespace CompositeStoneProcessor
                         if (spawned != null)
                         {
                             spawned.stackCount = prod.count;
-                            // Try to auto-store into container at drop cell
                             TryStoreInContainer(spawned, drop);
                         }
                     }
@@ -311,7 +316,6 @@ namespace CompositeStoneProcessor
             SetPowerConsumption(0);
             CancelProcessing();
         }
-
         private void TryStoreInContainer(Thing thing, IntVec3 cell)
         {
             List<Thing> things = Map.thingGrid.ThingsListAt(cell);
@@ -322,14 +326,21 @@ namespace CompositeStoneProcessor
                     ThingOwner container = holder.GetDirectlyHeldThings();
                     if (container != null)
                     {
-                        if (!container.TryAdd(thing)) { GenSpawn.Spawn(thing, cell, Map); }
+                        if (!container.TryAdd(thing))
+                        {
+                            GenSpawn.Spawn(thing, cell, Map);
+                        }
                         return;
                     }
                 }
             }
         }
-
-        private bool BillStillActive() { for (int i = 0; i < billStack.Count; i++) if (billStack[i] is Bill_Production bp && bp.recipe == currentRecipe) return true; return false; }
+        private bool BillStillActive()
+        {
+            for (int i = 0; i < billStack.Count; i++)
+                if (billStack[i] is Bill_Production bp && bp.recipe == currentRecipe) return true;
+            return false;
+        }
         private void CancelProcessing()
         {
             if (isProcessing) { isProcessing = false; currentRecipe = null; currentIngredientCount = 0; progressTicks = 0; displayProgressPct = -1; }
@@ -337,15 +348,31 @@ namespace CompositeStoneProcessor
 
         // Upgrade system
         public bool IsInstalled(RecipeDef def) => installedUpgrades.Contains(def);
-        public bool IsPending(RecipeDef def) => pendingUpgradeDef == def;
-        public bool CanInstall(RecipeDef def) => def != null && !installedUpgrades.Contains(def) && pendingUpgradeDef == null && (def.researchPrerequisite == null || def.researchPrerequisite.IsFinished);
+        public bool IsPending(RecipeDef def) => pendingUpgradeQueue.Contains(def);
+        public bool CanInstall(RecipeDef def)
+        {
+            if (def == null) return false;
+            if (installedUpgrades.Contains(def)) return false;
+            if (def.researchPrerequisite != null && !def.researchPrerequisite.IsFinished) return false;
+            MachineUpdateRecipeExtension ext = def.GetExt();
+            if (ext?.componentsPrerequisites != null)
+            {
+                foreach (var prereq in ext.componentsPrerequisites)
+                    if (!installedUpgrades.Contains(prereq)) return false;
+            }
+            return true;
+        }
         public void RequestUpgradeInstall(RecipeDef def)
         {
             if (def == null || installedUpgrades.Contains(def)) return;
             if (def.researchPrerequisite != null && !def.researchPrerequisite.IsFinished) return;
-            pendingUpgradeDef = def;
-            pendingUpgradeResources = CloneIngredientList(def.ingredients);
-            upgradeProgressTicks = -1;
+            if (pendingUpgradeQueue.Contains(def)) return;
+            pendingUpgradeQueue.Add(def);
+            if (pendingUpgradeQueue.Count == 1)
+            {
+                pendingUpgradeResources = CloneIngredientList(def.ingredients);
+                upgradeProgressTicks = -1;
+            }
         }
         public bool HasPendingUpgradeResources => !pendingUpgradeResources.NullOrEmpty();
         public List<ThingDefCountClass> PendingUpgradeResources => pendingUpgradeResources;
@@ -361,20 +388,36 @@ namespace CompositeStoneProcessor
         }
         private void CompleteUpgrade()
         {
-            if (pendingUpgradeDef == null) return;
-            if (!installedUpgrades.Contains(pendingUpgradeDef))
+            if (pendingUpgradeQueue.Count == 0) return;
+            RecipeDef completed = pendingUpgradeQueue[0];
+            if (!installedUpgrades.Contains(completed))
             {
-                installedUpgrades.Add(pendingUpgradeDef);
-                if (pendingUpgradeDef.GetExt()?.unlockRecipe != null)
+                installedUpgrades.Add(completed);
+                if (completed.GetExt()?.unlockRecipe != null)
                 {
-                    foreach (var r in pendingUpgradeDef.GetExt().unlockRecipe)
+                    foreach (var r in completed.GetExt().unlockRecipe)
                     {
-                        if (r != null) { bool exists = false; for (int j = 0; j < billStack.Count; j++) if (billStack[j] is Bill_Production bp2 && bp2.recipe == r) { exists = true; break; } if (!exists)
-                            billStack.AddBill(new Bill_Production(r)); }
+                        if (r != null)
+                        {
+                            bool alreadyHas = false;
+                            for (int i = 0; i < billStack.Count; i++)
+                                if (billStack[i] is Bill_Production bp && bp.recipe == r) { alreadyHas = true; break; }
+                            if (!alreadyHas) billStack.AddBill(new Bill_Production(r));
+                        }
                     }
                 }
             }
-            pendingUpgradeDef = null; pendingUpgradeResources = null; upgradeProgressTicks = 0;
+            pendingUpgradeQueue.RemoveAt(0);
+            if (pendingUpgradeQueue.Count > 0)
+            {
+                pendingUpgradeResources = CloneIngredientList(pendingUpgradeQueue[0].ingredients);
+                upgradeProgressTicks = -1;
+            }
+            else
+            {
+                pendingUpgradeResources = null;
+                upgradeProgressTicks = 0;
+            }
             Messages.Message("CompositeStoneProcessor_UpgradeInstalled".Translate(), this, MessageTypeDefOf.TaskCompletion, false);
         }
 
@@ -412,14 +455,13 @@ namespace CompositeStoneProcessor
             float tf = GetTempFactor();
             float tmp = GenTemperature.GetTemperatureForCell(Position, Map);
             text += "\n" + "TempStatus".Translate(tmp.ToString("F0"), (tf * 100f).ToString("F0"));
-            text += "\n" + "SpeedStatus".Translate(TotalSpeed.ToString("F2"), EffectiveSkill);
             text += "\n" + "PowerStatus".Translate(powerComp != null && powerComp.PowerOn ? "PowerElectric".Translate() : (refuelableComp != null && refuelableComp.HasFuel ? "PowerFuel".Translate() : "PowerNone".Translate()));
-            if (pendingUpgradeDef != null)
+            if (pendingUpgradeQueue.Count > 0)
             {
                 if (upgradeProgressTicks < 0 && pendingUpgradeResources != null && pendingUpgradeResources.Count > 0)
                 {
                     string prog = "DeliveryProgress".Translate() + " ";
-                    var orig = pendingUpgradeDef.ingredients;
+                    var orig = pendingUpgradeQueue[0].ingredients;
                     foreach (var o in orig)
                     {
                         int total = (int)o.GetBaseCount();
@@ -436,8 +478,8 @@ namespace CompositeStoneProcessor
                 }
                 else
                 {
-                    int pct = (upgradeProgressTicks >= 0) ? Mathf.Min(100, upgradeProgressTicks * 100 / (int)pendingUpgradeDef.workAmount) : 0;
-                    text += "\n" + "UpgradeProgressStatus".Translate(pendingUpgradeDef.label, pct);
+                    int pct = (upgradeProgressTicks >= 0) ? Mathf.Min(100, upgradeProgressTicks * 100 / (int)pendingUpgradeQueue[0].workAmount) : 0;
+                    text += "\n" + "UpgradeProgressStatus".Translate(pendingUpgradeQueue[0].label, pct);
                 }
             }
             return text;

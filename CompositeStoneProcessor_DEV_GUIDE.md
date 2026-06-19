@@ -1,10 +1,11 @@
 # Composite Stone Processor — MOD 拓展编写指南
 
 ## 目录
+
 1. [文件结构](#1-文件结构)
 2. [核心建筑 —— ThingDef](#2-核心建筑--thingdef)
 3. [加工配方 —— RecipeDef](#3-加工配方--recipedef)
-4. [升级模块 —— MachineUpdateRecipeExtension](#4-升级模块--machineupdaterecipeextension)
+4. #4-升级模块--machineupdaterecipeextension
 5. [配方消耗 —— MachineRecipeExtension](#5-配方消耗--machinerecipeextension)
 6. [研究项目 —— ResearchProjectDef](#6-研究项目--researchprojectdef)
 7. [升级物资搬运 —— WorkGiverDef](#7-升级物资搬运--workgiverdef)
@@ -72,17 +73,17 @@ Composite-Stone-Block/
 
 ### 关键属性
 
-| 节点 | 值 | 说明 |
-|------|-----|------|
-| `ParentName` | `BuildingBase` | 继承基础建筑属性 |
-| `thingClass` | `CompositeStoneProcessor.Building_CompositeStoneProcessor` | C# 主类 |
-| `tickerType` | `Normal` | 每 tick 调用 |
-| `size` | `(1,1)` | 1×1 |
-| `hasInteractionCell` | `true` | 产物掉落点 |
-| `interactionCellOffset` | `(0,0,-1)` | 掉落点偏移 |
-| `rotatable` | `true` | 可旋转 |
-| `designationCategory` | `Production` | 生产栏 |
-| `containedItemsSelectable` | `true` | 内部物品可选 |
+| 节点                         | 值                                                          | 说明        |
+| -------------------------- | ---------------------------------------------------------- | --------- |
+| `ParentName`               | `BuildingBase`                                             | 继承基础建筑属性  |
+| `thingClass`               | `CompositeStoneProcessor.Building_CompositeStoneProcessor` | C# 主类     |
+| `tickerType`               | `Normal`                                                   | 每 tick 调用 |
+| `size`                     | `(1,1)`                                                    | 1×1       |
+| `hasInteractionCell`       | `true`                                                     | 产物掉落点     |
+| `interactionCellOffset`    | `(0,0,-1)`                                                 | 掉落点偏移     |
+| `rotatable`                | `true`                                                     | 可旋转       |
+| `designationCategory`      | `Production`                                               | 生产栏       |
+| `containedItemsSelectable` | `true`                                                     | 内部物品可选    |
 
 ### comps 组件
 
@@ -170,15 +171,15 @@ Composite-Stone-Block/
 
 ### 现有配方参考
 
-| 配方 defName | 工作量 | 消耗 | 产出 | 技能 | 研究 |
-|-------------|--------|------|------|------|------|
-| `MakeCompositeStoneAuto` | 1600 | 1 石块 | 20 | — | — |
-| `MakeCompositeStoneAutoS` | 1200 | 1 石块 | 15 | Craft 4 | Fastcutting |
-| `MakeCompositeStoneAutoD` | 2000 | 1 石块 | 25 | Craft 4 | Delicatecutting |
-| `MakeCompositeStoneAutoB` | 4320 | 3 石块 | 45 | Craft 6 | Fastcutting + Delicatecutting |
-| `MakeCompositeStoneAutoFB` | 3240 | 3 石块 | 45 | Craft 8 | FastcuttingB |
-| `MakeCompositeStoneAutoDB` | 5400 | 3 石块 | 75 | Craft 8 | DelicatecuttingB |
-| `MakeCompositeStoneAutoM` | 3240 | 3 石块 | 75 | Craft 10 | Mastercutting |
+| 配方 defName                 | 工作量  | 消耗   | 产出  | 技能       | 研究                            |
+| -------------------------- | ---- | ---- | --- | -------- | ----------------------------- |
+| `MakeCompositeStoneAuto`   | 1600 | 1 石块 | 20  | —        | —                             |
+| `MakeCompositeStoneAutoS`  | 1200 | 1 石块 | 15  | Craft 4  | Fastcutting                   |
+| `MakeCompositeStoneAutoD`  | 2000 | 1 石块 | 25  | Craft 4  | Delicatecutting               |
+| `MakeCompositeStoneAutoB`  | 4320 | 3 石块 | 45  | Craft 6  | Fastcutting + Delicatecutting |
+| `MakeCompositeStoneAutoFB` | 3240 | 3 石块 | 45  | Craft 8  | FastcuttingB                  |
+| `MakeCompositeStoneAutoDB` | 5400 | 3 石块 | 75  | Craft 8  | DelicatecuttingB              |
+| `MakeCompositeStoneAutoM`  | 3240 | 3 石块 | 75  | Craft 10 | Mastercutting                 |
 
 > **注意**：配方必须通过 `<recipeUsers><li>CompositeStoneProcessor</li></recipeUsers>` 关联到加工站（已在抽象基类 `MakeCompositeStoneAutoBase` 中定义）。
 
@@ -242,14 +243,15 @@ public class MachineUpdateRecipeExtension : DefModExtension
 
 ### 字段说明
 
-| 字段 | 类型 | 必需 | 默认值 | 说明 |
-|------|------|------|--------|------|
-| `speedUp` | float | 否 | 0 | 速度增量，累加到总速度系数。例：0.35 → 速度 ×1.35 |
-| `sortOrder` | int | 否 | 999 | 升级界面排序序号，升序排列 |
-| `skillLevel` | int | 否 | 0 | 等效手工技能，仅用于显示 |
-| `unlockRecipe` | list | 否 | — | 安装后自动作为清单添加的 RecipeDef 列表 |
+| 字段             | 类型    | 必需  | 默认值 | 说明                              |
+| -------------- | ----- | --- | --- | ------------------------------- |
+| `speedUp`      | float | 否   | 0   | 速度增量，累加到总速度系数。例：0.35 → 速度 ×1.35 |
+| `sortOrder`    | int   | 否   | 999 | 升级界面排序序号，升序排列                   |
+| `skillLevel`   | int   | 否   | 0   | 等效手工技能，仅用于显示                    |
+| `unlockRecipe` | list  | 否   | —   | 安装后自动作为清单添加的 RecipeDef 列表       |
 
 > **注意**：
+> 
 > - 升级 RecipeDef 不应包含 `<recipeUsers>`，否则会出现在工作台清单中
 > - 不包含 `<jobString>`，不参与工作台工作流程
 > - 物资通过 `WorkGiver_UpgradeHaul` 由殖民者搬运
@@ -283,10 +285,10 @@ public class MachineRecipeExtension : DefModExtension
 
 ### 字段说明
 
-| 字段 | 类型 | 必需 | 说明 |
-|------|------|------|------|
-| `fuelConsumptionRate` | float | 是 | 每 60 tick 消耗的燃料单位数。必须 > 0 |
-| `powerConsume` | int | 是 | 加工时的额外耗电量（W），叠加在待机 50W 之上 |
+| 字段                    | 类型    | 必需  | 说明                        |
+| --------------------- | ----- | --- | ------------------------- |
+| `fuelConsumptionRate` | float | 是   | 每 60 tick 消耗的燃料单位数。必须 > 0 |
+| `powerConsume`        | int   | 是   | 加工时的额外耗电量（W），叠加在待机 50W 之上 |
 
 > 不含此扩展的配方使用 Mod 设置中的默认值（`defaultFuelRate` / `defaultPowerConsume`）。
 
@@ -316,9 +318,9 @@ public class MachineRecipeExtension : DefModExtension
 
 ### 现有研究参考
 
-| defName | 成本 | 前置 | 坐标 |
-|---------|------|------|------|
-| `CompositeStoneProcessing` | 700 | Stonecutting | (0,6) |
+| defName                    | 成本   | 前置                       | 坐标    |
+| -------------------------- | ---- | ------------------------ | ----- |
+| `CompositeStoneProcessing` | 700  | Stonecutting             | (0,6) |
 | `CompositeStoneUpgradeMK1` | 1200 | CompositeStoneProcessing | (1,6) |
 | `CompositeStoneUpgradeMK2` | 2200 | CompositeStoneUpgradeMK1 | (2,6) |
 | `CompositeStoneUpgradeMK3` | 3500 | CompositeStoneUpgradeMK2 | (3,6) |
@@ -372,6 +374,7 @@ public class MachineRecipeExtension : DefModExtension
 **文件**：`Languages/English/Keyed/B_CompositeStoneProcessor.xml`
 
 格式：
+
 ```xml
 <LanguageData>
   <YourKey>Your translation text</YourKey>
@@ -388,13 +391,13 @@ public class MachineRecipeExtension : DefModExtension
 
 在游戏主菜单 → 选项 → Mod 选项 → Composite Stone Processor 中配置：
 
-| 设置 | 类型 | 默认 | 范围 |
-|------|------|------|------|
-| `alertEnabled` | bool | true | 资源不足提醒 |
-| `tickInterval` | int | 120 | 60~1000，步进 10 |
-| `bgColorHex` | string | "4B4B4B" | 十六进制色码 |
-| `defaultFuelRate` | float | 0.5 | 0.1~3.0，步进 0.1 |
-| `defaultPowerConsume` | int | 200 | 50~500，步进 10 |
+| 设置                    | 类型     | 默认       | 范围             |
+| --------------------- | ------ | -------- | -------------- |
+| `alertEnabled`        | bool   | true     | 资源不足提醒         |
+| `tickInterval`        | int    | 120      | 60~1000，步进 10  |
+| `bgColorHex`          | string | "4B4B4B" | 十六进制色码         |
+| `defaultFuelRate`     | float  | 0.5      | 0.1~3.0，步进 0.1 |
+| `defaultPowerConsume` | int    | 200      | 50~500，步进 10   |
 
 ---
 
@@ -456,6 +459,7 @@ public class MachineRecipeExtension : DefModExtension
 ### 步骤 3（可选）：添加翻译
 
 在翻译文件中添加：
+
 ```xml
 <CompositeStoneUpgradeMK4.label>加工站升级MK4</CompositeStoneUpgradeMK4.label>
 <CompositeStoneUpgradeMK4.description>加工站的最终极致升级，处理速度提升至等效手工技能25级。</CompositeStoneUpgradeMK4.description>
@@ -528,19 +532,19 @@ public class MachineRecipeExtension : DefModExtension
 
 ## 附录：燃料/电力逻辑
 
-| 状态 | 电力消耗 | 燃料消耗 |
-|------|---------|---------|
-| 待机 + 有电网 | 50W | 无 |
-| 待机 + 仅燃料 | 0 | 无 |
-| 加工 + 有电网 | 50 + 配方 powerConsume | 无 |
-| 加工 + 仅燃料 | 虚拟负载（触发产热） | 配方 fuelConsumptionRate / 60tick |
-| 无电无燃料 | 0 | 无 |
+| 状态       | 电力消耗                 | 燃料消耗                            |
+| -------- | -------------------- | ------------------------------- |
+| 待机 + 有电网 | 50W                  | 无                               |
+| 待机 + 仅燃料 | 0                    | 无                               |
+| 加工 + 有电网 | 50 + 配方 powerConsume | 无                               |
+| 加工 + 仅燃料 | 虚拟负载（触发产热）           | 配方 fuelConsumptionRate / 60tick |
+| 无电无燃料    | 0                    | 无                               |
 
 ## 附录：温度效率曲线
 
-| 温度范围 | 效率 |
-|---------|------|
-| -10°C ~ 80°C | 100% |
-| -30°C ~ -10°C | 100% → 0%（线性下降） |
-| 80°C ~ 120°C | 100% → 0%（线性下降） |
-| < -30°C 或 > 120°C | 0%（停止工作） |
+| 温度范围              | 效率              |
+| ----------------- | --------------- |
+| -10°C ~ 80°C      | 100%            |
+| -30°C ~ -10°C     | 100% → 0%（线性下降） |
+| 80°C ~ 120°C      | 100% → 0%（线性下降） |
+| < -30°C 或 > 120°C | 0%（停止工作）        |
