@@ -53,4 +53,7 @@
   <ModSetting_DefaultPower>Default power (no extension): {0}W</ModSetting_DefaultPower>
   <FinalSpeedStatus>Final speed: {0}x (base {1}x × temp {2}%)</FinalSpeedStatus>
   <ModSetting_DefaultSkillLevel>Default skill (recipe has none): {0}</ModSetting_DefaultSkillLevel>
+  <ModSetting_IntervalNote>Also controls idle bill-check frequency. Higher values improve performance but may slightly delay processing start.</ModSetting_IntervalNote>
+  <UpgradeSummaryLabel>Processor Status</UpgradeSummaryLabel>
+  <ConfigurableComponentsLabel>Configurable Components</ConfigurableComponentsLabel>
 </LanguageData>

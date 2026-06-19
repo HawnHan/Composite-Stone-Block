@@ -17,6 +17,7 @@ namespace CompositeStoneProcessor
         private static readonly Color COrange = new Color(1f, 0.6f, 0f);
         private static readonly Color CGreen = new Color(0.3f, 0.9f, 0.3f);
         private static readonly Color CGray = new Color(0.5f, 0.5f, 0.5f);
+        private static readonly Color CBorder = new Color(0.5f, 0.5f, 0.5f, 0.4f);
 
         protected override void FillTab()
         {
@@ -30,14 +31,33 @@ namespace CompositeStoneProcessor
             Color boxBg = new Color(bg.r * 0.8f, bg.g * 0.8f, bg.b * 0.8f);
 
             float boxWidth = this.size.x - 28f;
-            float headerH = 60f;
+
+            float totalSpeed = p.TotalSpeed;
+            float tempFactor = p.GetTempFactor();
+            float finalSpeed = totalSpeed * tempFactor;
+            
+            string h1 = "FinalSpeedStatus".Translate(finalSpeed.ToString("F2"), totalSpeed.ToString("F2"), (tempFactor * 100f).ToString("F0"));
+            
+
+            Text.Font = GameFont.Medium;
+            float headerTitleH = 28f;
+            Text.Font = GameFont.Small;
+            float h1H = Text.CalcHeight(h1, boxWidth);
+                        float headerH = headerTitleH + h1H + 8f;
+            float headerBoxH = headerH - 4f;
+
             float[] boxHs = new float[all.Count];
             float totalH = headerH + 10f;
             for (int i = 0; i < all.Count; i++)
             {
                 RecipeDef d = all[i];
                 UState st = GetState(p, d);
-                float h = 68f;
+
+                string cs = GetCost(d);
+                float costH = Text.CalcHeight("UpgradeCostLabel".Translate() + " " + cs, boxWidth);
+                float speedUp = d.GetExt()?.speedUp ?? 0;
+                float speedH = (speedUp > 0) ? Text.CalcHeight("SpeedInfo".Translate(speedUp.ToString("F2"), d.GetExt()?.skillLevel ?? 0), boxWidth) : 0f;
+
                 string thirdLine = "";
                 if (st == UState.Locked && d.researchPrerequisite != null)
                     thirdLine = "RequiresResearchStatus".Translate(d.researchPrerequisite.LabelCap);
@@ -47,7 +67,9 @@ namespace CompositeStoneProcessor
                     foreach (var r in d.GetExt()?.unlockRecipe) ul += r.LabelCap + " ";
                     thirdLine = ul;
                 }
-                if (thirdLine.Length > 0) h += Text.CalcHeight(thirdLine, boxWidth);
+                float thirdH = (thirdLine.Length > 0) ? Text.CalcHeight(thirdLine, boxWidth) : 0f;
+
+                float h = 34f + costH + 4f + speedH + 4f + thirdH + 4f;
                 boxHs[i] = h;
                 totalH += h + 6f;
             }
@@ -62,19 +84,23 @@ namespace CompositeStoneProcessor
 
             float y = 2f;
 
-            Text.Font = GameFont.Small;
+            Text.Font = GameFont.Medium;
             GUI.color = Color.white;
-            float totalSpeed = p.TotalSpeed;
-            float tempFactor = p.GetTempFactor();
-            float finalSpeed = totalSpeed * tempFactor;
-            Widgets.Label(new Rect(4f, y, view.width, 22f), "FinalSpeedStatus".Translate(finalSpeed.ToString("F2"), totalSpeed.ToString("F2"), (tempFactor * 100f).ToString("F0")));
-            y += 24f;
-            float tmp = GenTemperature.GetTemperatureForCell(p.Position, p.Map);
-            Widgets.Label(new Rect(4f, y, view.width, 22f), "TempStatus".Translate(tmp.ToString("F0"), (tempFactor * 100f).ToString("F0")));
-            y += 30f;
+            GUI.color = boxBg;
+            GUI.DrawTexture(new Rect(2f, y, view.width - 4f, headerBoxH), BaseContent.WhiteTex);
+            GUI.color = CBorder;
+            Widgets.DrawBox(new Rect(2f, y, view.width - 4f, headerBoxH), 1);
+            GUI.color = Color.white;
+            Widgets.Label(new Rect(10f, y + 3f, view.width - 20f, headerTitleH), "UpgradeSummaryLabel".Translate());
+            y += headerTitleH + 2f;
+
+            Text.Font = GameFont.Small;
+            Widgets.Label(new Rect(10f, y, view.width - 20f, h1H), h1);
+            
+            y += h1H + 8f;
 
             Text.Font = GameFont.Medium;
-            Widgets.Label(new Rect(4f, y, view.width, 22f), "TabUpgradesLabel".Translate());
+            Widgets.Label(new Rect(4f, y, view.width, 24f), "ConfigurableComponentsLabel".Translate());
             y += 26f;
             Text.Font = GameFont.Small;
 
@@ -97,8 +123,7 @@ namespace CompositeStoneProcessor
                 GUI.color = tc;
                 Widgets.DrawBox(new Rect(2f, y, view.width - 4f, boxH), 1);
 
-                Rect nl = new Rect(10f, y + 3f, view.width * 0.55f, 26f);
-                Widgets.Label(nl, d.label);
+                Widgets.Label(new Rect(10f, y + 3f, view.width * 0.55f, 26f), d.label);
 
                 Rect br = new Rect(view.width * 0.58f, y + 2f, view.width * 0.38f, 28f);
                 if (st == UState.Ready && p.CanInstall(d))
@@ -122,19 +147,29 @@ namespace CompositeStoneProcessor
                 Widgets.DrawLineHorizontal(8f, y + 32f, view.width - 20f);
                 GUI.color = tc;
 
-                string cs = GetCost(d);
-                Widgets.Label(new Rect(10f, y + 36f, view.width - 20f, 20f), "UpgradeCostLabel".Translate() + " " + cs);
+                // Fully dynamic content layout using Text.CalcHeight
+                float dy = y + 34f;
 
-                string si = "SpeedInfo".Translate((d.GetExt()?.speedUp ?? 0).ToString("F2"), d.GetExt()?.skillLevel ?? 0);
-                Widgets.Label(new Rect(10f, y + 56f, view.width - 20f, 20f), si);
+                string cs2 = GetCost(d);
+                float costH2 = Text.CalcHeight("UpgradeCostLabel".Translate() + " " + cs2, view.width - 20f);
+                Widgets.Label(new Rect(10f, dy, view.width - 20f, costH2), "UpgradeCostLabel".Translate() + " " + cs2);
+                dy += costH2 + 4f;
 
-                float thirdY = y + 68f;
+                float speedUp2 = d.GetExt()?.speedUp ?? 0;
+                if (speedUp2 > 0)
+                {
+                    string si2 = "SpeedInfo".Translate(speedUp2.ToString("F2"), d.GetExt()?.skillLevel ?? 0);
+                    float speedH2 = Text.CalcHeight(si2, view.width - 20f);
+                    Widgets.Label(new Rect(10f, dy, view.width - 20f, speedH2), si2);
+                    dy += speedH2 + 4f;
+                }
+
                 if (st == UState.Locked && d.researchPrerequisite != null)
                 {
                     GUI.color = CGray;
                     string t3 = "RequiresResearchStatus".Translate(d.researchPrerequisite.LabelCap);
                     float h3 = Text.CalcHeight(t3, view.width - 20f);
-                    Widgets.Label(new Rect(10f, thirdY, view.width - 20f, h3), t3);
+                    Widgets.Label(new Rect(10f, dy, view.width - 20f, h3), t3);
                 }
                 else if (st == UState.Installed && d.GetExt()?.unlockRecipe != null && d.GetExt()?.unlockRecipe.Count > 0)
                 {
@@ -142,7 +177,27 @@ namespace CompositeStoneProcessor
                     string ul = "UnlockedRecipes".Translate() + ": ";
                     foreach (var r in d.GetExt()?.unlockRecipe) ul += r.LabelCap + " ";
                     float h3 = Text.CalcHeight(ul, view.width - 20f);
-                    Widgets.Label(new Rect(10f, thirdY, view.width - 20f, h3), ul);
+                    Widgets.Label(new Rect(10f, dy, view.width - 20f, h3), ul);
+                }
+                else if (st == UState.Installing && p.PendingUpgradeResources != null && p.PendingUpgradeResources.Count > 0)
+                {
+                    GUI.color = COrange;
+                    string prog = "DeliveryProgress".Translate() + " ";
+                    foreach (var o in d.ingredients)
+                    {
+                        int total = (int)o.GetBaseCount();
+                        ThingDef oDef = o.filter?.AnyAllowedDef;
+                        int remaining = total;
+                        if (oDef != null)
+                        {
+                            for (int j = 0; j < p.PendingUpgradeResources.Count; j++)
+                                if (p.PendingUpgradeResources[j].thingDef == oDef)
+                                { remaining = p.PendingUpgradeResources[j].count; break; }
+                            prog += oDef.LabelCap + " " + (total - remaining) + "/" + total + " ";
+                        }
+                    }
+                    float h3 = Text.CalcHeight(prog, view.width - 20f);
+                    Widgets.Label(new Rect(10f, dy, view.width - 20f, h3), prog);
                 }
 
                 y += boxH + 6f;

@@ -53,4 +53,7 @@
   <ModSetting_DefaultPower>默认加工功率（无扩展时）：{0}W</ModSetting_DefaultPower>
   <FinalSpeedStatus>最终速度：{0}x（速度系数{1}x × 温度效率{2}%）</FinalSpeedStatus>
   <ModSetting_DefaultSkillLevel>默认技能等级（清单无要求时）：{0}</ModSetting_DefaultSkillLevel>
+  <ModSetting_IntervalNote>加工间隔也控制空闲时检测新清单的频率。数值越大性能越好，但启动加工可能会有轻微延迟。</ModSetting_IntervalNote>
+  <UpgradeSummaryLabel>加工站信息总览</UpgradeSummaryLabel>
+  <ConfigurableComponentsLabel>可配置组件</ConfigurableComponentsLabel>
 </LanguageData>

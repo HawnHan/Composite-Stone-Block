@@ -10,6 +10,7 @@ namespace CompositeStoneProcessor
         public int sortOrder = 999;
         public int skillLevel;
         public List<RecipeDef> unlockRecipe;
+        public List<RecipeDef> componentsPrerequisites;
     }
 
     public static class UpgradeHelper
