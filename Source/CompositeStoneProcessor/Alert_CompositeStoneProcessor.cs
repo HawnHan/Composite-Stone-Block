@@ -1,4 +1,4 @@
-using RimWorld;
+﻿using RimWorld;
 using Verse;
 using System.Collections.Generic;
 
@@ -12,7 +12,7 @@ namespace CompositeStoneProcessor
 
             foreach (Map map in Find.Maps)
             {
-                foreach (Thing t in map.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial))
+                foreach (Building t in map.listerBuildings.allBuildingsColonist)
                 {
                     if (t is Building_CompositeStoneProcessor b && !b.Destroyed && b.Spawned)
                     {
@@ -30,7 +30,7 @@ namespace CompositeStoneProcessor
             string text = "";
             foreach (Map map in Find.Maps)
             {
-                foreach (Thing t in map.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial))
+                foreach (Building t in map.listerBuildings.allBuildingsColonist)
                 {
                     if (t is Building_CompositeStoneProcessor b && !b.Destroyed && b.Spawned)
                     {

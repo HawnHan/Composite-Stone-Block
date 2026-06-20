@@ -134,7 +134,7 @@ namespace CompositeStoneProcessor
                     UState.Installed => "UpgradeConfigured".Translate(),
                 };
 
-                GUI.color = boxBg;
+                GUI.color = (st == UState.Locked) ? new Color(boxBg.r * 0.6f, boxBg.g * 0.6f, boxBg.b * 0.6f, 0.6f) : boxBg;
                 GUI.DrawTexture(new Rect(2f, y, view.width - 4f, boxH), BaseContent.WhiteTex);
                 GUI.color = tc;
                 Widgets.DrawBox(new Rect(2f, y, view.width - 4f, boxH), 1);

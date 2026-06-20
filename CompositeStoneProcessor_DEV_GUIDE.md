@@ -1,550 +1,257 @@
-# Composite Stone Processor — MOD 拓展编写指南
+# Composite Stone Processor — 开发指南
 
-## 目录
-
-1. [文件结构](#1-文件结构)
-2. [核心建筑 —— ThingDef](#2-核心建筑--thingdef)
-3. [加工配方 —— RecipeDef](#3-加工配方--recipedef)
-4. #4-升级模块--machineupdaterecipeextension
-5. [配方消耗 —— MachineRecipeExtension](#5-配方消耗--machinerecipeextension)
-6. [研究项目 —— ResearchProjectDef](#6-研究项目--researchprojectdef)
-7. [升级物资搬运 —— WorkGiverDef](#7-升级物资搬运--workgiverdef)
-8. [建设产热 —— CompProperties_HeatPusher](#8-建筑产热--compproperties_heatpusher)
-9. [翻译文件](#9-翻译文件)
-10. [Mod 设置](#10-mod-设置)
-11. [完整示例：添加一个升级模块](#11-完整示例添加一个升级模块)
-12. [完整示例：添加一个加工配方](#12-完整示例添加一个加工配方)
+> **版本**: 1.0 (RimWorld 1.6)
+> **仓库**: `D:\SteamLibrary\steamapps\common\RimWorld\Mods\Composite-Stone-Block`
+> **源码**: `Source/CompositeStoneProcessor/`
+> **构建**: `dotnet build "Source/CompositeStoneProcessor/CompositeStoneProcessor.csproj"`
 
 ---
 
-## 1. 文件结构
+## 1. 项目架构
+
+### 文件树
 
 ```
-Composite-Stone-Block/
-├── About/
-│   └── About.xml                    # MOD 元数据
-├── Assemblies/
-│   └── CompositeStoneProcessor.dll  # 编译后的 DLL
+Root/
+├── About/About.xml
+├── Assemblies/CompositeStoneProcessor.dll
 ├── Defs/
-│   ├── MachinesUpdateRecipeDefs/
-│   │   └── B_CompositeUpgrades.xml  # 升级模块定义
-│   ├── RecipeDefs/
-│   │   ├── B_CompositeStoneProcessorRecipes.xml  # 加工配方
-│   │   └── B_Stonecutting.xml      # 原 MOD 配方（不修改）
-│   ├── ResearchDefs/
-│   │   ├── ResearchProjectDefs.xml  # 研究项目
-│   │   └── ResearchTabDefs.xml      # 研究标签
-│   ├── TerrainDefs/
-│   │   └── GeneralStoneTile.xml     # 复合石材地板（不修改）
-│   ├── ThingDefs/
-│   │   ├── B_CompositeStoneProcessor.xml  # 建筑定义
-│   │   └── B_CurrencyStone.xml     # 复合石材物品（不修改）
-│   └── WorkGiverDefs/
-│       └── B_UpgradeHaul.xml        # 升级物资搬运
-├── Languages/
-│   ├── ChineseSimplified/Keyed/
-│   │   └── B_CompositeStoneProcessor.xml  # 中文翻译
-│   └── English/Keyed/
-│       └── B_CompositeStoneProcessor.xml  # 英文翻译
-├── Source/
-│   └── CompositeStoneProcessor/     # C# 源码
-│       ├── Properties/
-│       │   └── AssemblyInfo.cs
-│       ├── Alert_CompositeStoneProcessor.cs
-│       ├── Building_CompositeStoneProcessor.cs  # 主建筑逻辑
-│       ├── CompositeStoneProcessorMod.cs        # Mod 设置
-│       ├── ITab_Upgrades.cs                     # 升级界面
-│       ├── MachineRecipeExtension.cs             # 配方消耗扩展
-│       ├── MachineUpdateRecipeDef.cs             # 升级模块扩展
-│       └── WorkGiver_UpgradeHaul.cs             # 物资搬运
+│   ├── MachinesUpdateRecipeDefs/B_CompositeUpgrades.xml
+│   ├── RecipeDefs/B_CompositeStoneProcessorRecipes.xml
+│   ├── ThingDefs/B_CompositeStoneProcessor.xml
+│   ├── ResearchDefs/ResearchProjectDefs.xml
+│   └── WorkGiverDefs/B_UpgradeHaul.xml
+├── Languages/ChineseSimplified/Keyed/B_CompositeStoneProcessor.xml
+├── Languages/English/Keyed/B_CompositeStoneProcessor.xml
+├── Source/CompositeStoneProcessor/
+│   ├── Building_CompositeStoneProcessor.cs         # 主建筑类 (~500 lines)
+│   ├── ITab_Upgrades.cs                            # 升级界面标签 (~244 lines)
+│   ├── MachineUpdateRecipeDef.cs                   # MachineUpdateRecipeExtension
+│   ├── MachineRecipeExtension.cs                   # MachineRecipeExtension
+│   ├── CompositeStoneProcessorMod.cs               # Mod Settings
+│   ├── WorkGiver_UpgradeHaul.cs                    # 升级物资搬运 WorkGiver
+│   ├── Alert_CompositeStoneProcessor.cs            # Alert
+│   └── CompositeStoneProcessor.csproj
 └── Textures/
-    └── Things/Building/
-        ├── CompositeStoneProcessor.png     # 建筑纹理
-        ├── CompositeStoneUpgradeMK1.png     # 升级图标
-        ├── CompositeStoneUpgradeMK2.png
-        └── CompositeStoneUpgradeMK3.png
+```
+
+### 继承链
+
+```
+Building_CompositeStoneProcessor
+  extends Building_WorkTable
+  implements IStoreSettingsParent   # 储存设置 + 搬运目标
+  implements ISlotGroupParent       # HaulDestination
+  implements IThingHolder           # ThingOwner<Thing>
 ```
 
 ---
 
-## 2. 核心建筑 —— ThingDef
+## 2. 建筑主类 — Building_CompositeStoneProcessor
 
-**文件**：`Defs/ThingDefs/B_CompositeStoneProcessor.xml`
+### 核心字段
 
-### 关键属性
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `innerContainer` | `ThingOwner<Thing>` | 内部不可见储存 (30 石块上限) |
+| `installedUpgrades` | `List<RecipeDef>` | 已安装升级列表 |
+| `pendingUpgradeQueue` | `List<RecipeDef>` | 等待安装的升级队列 |
+| `pendingUpgradeResources` | `List<ThingDefCountClass>` | 当前等待收集的升级物资 |
+| `upgradeProgressTicks` | `int` | 升级进度 (-1=等物资, 0+=计时中) |
+| `progressTicks` | `int` | 当前加工累计 tick |
+| `currentRecipe` | `RecipeDef` | 正在加工的配方 |
+| `isProcessing` | `bool` | 是否正在加工 |
 
-| 节点                         | 值                                                          | 说明        |
-| -------------------------- | ---------------------------------------------------------- | --------- |
-| `ParentName`               | `BuildingBase`                                             | 继承基础建筑属性  |
-| `thingClass`               | `CompositeStoneProcessor.Building_CompositeStoneProcessor` | C# 主类     |
-| `tickerType`               | `Normal`                                                   | 每 tick 调用 |
-| `size`                     | `(1,1)`                                                    | 1×1       |
-| `hasInteractionCell`       | `true`                                                     | 产物掉落点     |
-| `interactionCellOffset`    | `(0,0,-1)`                                                 | 掉落点偏移     |
-| `rotatable`                | `true`                                                     | 可旋转       |
-| `designationCategory`      | `Production`                                               | 生产栏       |
-| `containedItemsSelectable` | `true`                                                     | 内部物品可选    |
+### Tick() 主循环
 
-### comps 组件
+```
+1. 升级队列处理 (IsHashIntervalTick(ti))
+   - pendingUpgradeQueue[0] 资源收集完 -> 开始升级计时
+   - upgradeProgressTicks >= workAmount -> CompleteUpgrade()
 
-```xml
-<comps>
-  <!-- 1. 燃料系统 -->
-  <li Class="CompProperties_Refuelable">
-    <fuelCapacity>75</fuelCapacity>
-    <targetFuelLevelConfigurable>true</targetFuelLevelConfigurable>
-    <fuelFilter>
-      <thingDefs>
-        <li>Chemfuel</li>
-        <li>WoodLog</li>
-      </thingDefs>
-    </fuelFilter>
-    <consumeFuelOnlyWhenUsed>true</consumeFuelOnlyWhenUsed>
-    <showAllowAutoRefuelToggle>true</showAllowAutoRefuelToggle>
-    <autoRefuelPercent>0.2</autoRefuelPercent>
-    <showFuelGizmo>true</showFuelGizmo>
-    <drawOutOfFuelOverlay>false</drawOutOfFuelOverlay>
-  </li>
+2. 能源检查
+   - 无电+无燃料 -> SetPowerConsumption(0) + CancelProcessing()
 
-  <!-- 2. 电力系统 -->
-  <li Class="CompProperties_Power">
-    <compClass>CompPowerTrader</compClass>
-    <basePowerConsumption>50</basePowerConsumption>
-  </li>
+3. 空闲找清单 (IsHashIntervalTick(ti) 降频)
+   - FindBill() + HasIngredient() -> 启动加工
 
-  <!-- 3. 产热系统（原版 CompHeatPusherPowered） -->
-  <li Class="CompProperties_HeatPusher">
-    <compClass>CompHeatPusherPowered</compClass>
-    <heatPerSecond>3</heatPerSecond>
-  </li>
-</comps>
+4. 加工推进 (IsHashIntervalTick(ti))
+   - 温度检查 GetTempFactor()
+   - 燃料消耗 / 电力切换
+   - progressTicks += ti * TotalSpeed * tempFactor
+   - >= workAmount -> CompleteProcessing()
 ```
 
-### inspectorTabs
+### FindBill() - 清单过滤含技能等级
 
-```xml
-<inspectorTabs>
-  <li>ITab_Bills</li>                            <!-- 清单界面 -->
-  <li>ITab_Storage</li>                          <!-- 储存设置 -->
-  <li>CompositeStoneProcessor.ITab_Upgrades</li>  <!-- 升级界面 -->
-</inspectorTabs>
 ```
-
----
-
-## 3. 加工配方 —— RecipeDef
-
-**文件**：`Defs/RecipeDefs/B_CompositeStoneProcessorRecipes.xml`
-
-### 模板
-
-```xml
-<RecipeDef ParentName="MakeCompositeStoneAutoBase">
-    <defName>YourRecipeDefName</defName>
-    <label>Your recipe label</label>
-    <workAmount>1600</workAmount>                    <!-- 所需工作量（tick） -->
-    <ingredients>
-      <li>
-        <filter>
-          <categories>
-            <li>StoneChunks</li>                    <!-- 接受所有石块类型 -->
-          </categories>
-        </filter>
-        <count>1</count>                            <!-- 消耗数量 -->
-      </li>
-    </ingredients>
-    <products>
-      <BlockCompositeStone>20</BlockCompositeStone>  <!-- 产出复合石材数量 -->
-    </products>
-    <skillRequirements>                              <!-- 可选：技能要求 -->
-      <Crafting>6</Crafting>
-    </skillRequirements>
-    <researchPrerequisite>Fastcutting</researchPrerequisite>  <!-- 可选：研究前置 -->
-    <modExtensions>                                  <!-- 可选：燃料/电力消耗 -->
-      <li Class="CompositeStoneProcessor.MachineRecipeExtension">
-        <fuelConsumptionRate>0.5</fuelConsumptionRate>
-        <powerConsume>200</powerConsume>
-      </li>
-    </modExtensions>
-</RecipeDef>
-```
-
-### 现有配方参考
-
-| 配方 defName                 | 工作量  | 消耗   | 产出  | 技能       | 研究                            |
-| -------------------------- | ---- | ---- | --- | -------- | ----------------------------- |
-| `MakeCompositeStoneAuto`   | 1600 | 1 石块 | 20  | —        | —                             |
-| `MakeCompositeStoneAutoS`  | 1200 | 1 石块 | 15  | Craft 4  | Fastcutting                   |
-| `MakeCompositeStoneAutoD`  | 2000 | 1 石块 | 25  | Craft 4  | Delicatecutting               |
-| `MakeCompositeStoneAutoB`  | 4320 | 3 石块 | 45  | Craft 6  | Fastcutting + Delicatecutting |
-| `MakeCompositeStoneAutoFB` | 3240 | 3 石块 | 45  | Craft 8  | FastcuttingB                  |
-| `MakeCompositeStoneAutoDB` | 5400 | 3 石块 | 75  | Craft 8  | DelicatecuttingB              |
-| `MakeCompositeStoneAutoM`  | 3240 | 3 石块 | 75  | Craft 10 | Mastercutting                 |
-
-> **注意**：配方必须通过 `<recipeUsers><li>CompositeStoneProcessor</li></recipeUsers>` 关联到加工站（已在抽象基类 `MakeCompositeStoneAutoBase` 中定义）。
-
----
-
-## 4. 升级模块 —— MachineUpdateRecipeExtension
-
-**文件**：`Defs/MachinesUpdateRecipeDefs/B_CompositeUpgrades.xml`
-
-### C# 定义
-
-```csharp
-public class MachineUpdateRecipeExtension : DefModExtension
+private Bill_Production FindBill()
 {
-    public float speedUp;         // 速度增量
-    public int sortOrder = 999;   // 排序序号
-    public int skillLevel;        // 等效技能（显示用）
-    public List<RecipeDef> unlockRecipe;  // 解锁的清单
+    for each bill, if bill.ShouldDoNow():
+        int req = bill.recipe.skillRequirements 有 ? minLevel : settings.defaultSkillLevel
+        if EffectiveSkill >= req -> return bill
 }
 ```
 
-### XML 模板
+### Notify_ReceivedThing - 物品吸入
 
-```xml
-<RecipeDef>
-    <defName>YourUpgradeDefName</defName>
-    <label>Your Upgrade Label</label>
-    <description>Description of your upgrade module.</description>
-    <workAmount>2000</workAmount>                     <!-- 安装所需 tick -->
-    <researchPrerequisite>CompositeStoneUpgradeMK1</researchPrerequisite>  <!-- 研究前置 -->
-    <ingredients>
-      <li>
-        <filter>
-          <thingDefs>
-            <li>Steel</li>
-          </thingDefs>
-        </filter>
-        <count>50</count>                            <!-- 所需钢材 -->
-      </li>
-      <li>
-        <filter>
-          <thingDefs>
-            <li>ComponentIndustrial</li>
-          </thingDefs>
-        </filter>
-        <count>3</count>                             <!-- 所需零件 -->
-      </li>
-    </ingredients>
-    <modExtensions>
-      <li Class="CompositeStoneProcessor.MachineUpdateRecipeExtension">
-        <speedUp>0.35</speedUp>         <!-- float, 速度增量 -->
-        <sortOrder>10</sortOrder>       <!-- int, 排序 -->
-        <skillLevel>10</skillLevel>     <!-- int, 等效技能 -->
-        <unlockRecipe>                   <!-- 可选：解锁的清单 -->
-          <li>SomeRecipeDefName</li>
-        </unlockRecipe>
-      </li>
-    </modExtensions>
-</RecipeDef>
+```
+Thing 落到建筑格子时触发:
+  石块(StoneChunks) -> AbsorbChunk() -> 吸入 innerContainer
+  升级物资 -> TryAcceptUpgradeResource() -> 扣除并销毁
 ```
 
-### 字段说明
+### DeSpawn() - 拆除清理
 
-| 字段             | 类型    | 必需  | 默认值 | 说明                              |
-| -------------- | ----- | --- | --- | ------------------------------- |
-| `speedUp`      | float | 否   | 0   | 速度增量，累加到总速度系数。例：0.35 → 速度 ×1.35 |
-| `sortOrder`    | int   | 否   | 999 | 升级界面排序序号，升序排列                   |
-| `skillLevel`   | int   | 否   | 0   | 等效手工技能，仅用于显示                    |
-| `unlockRecipe` | list  | 否   | —   | 安装后自动作为清单添加的 RecipeDef 列表       |
-
-> **注意**：
-> 
-> - 升级 RecipeDef 不应包含 `<recipeUsers>`，否则会出现在工作台清单中
-> - 不包含 `<jobString>`，不参与工作台工作流程
-> - 物资通过 `WorkGiver_UpgradeHaul` 由殖民者搬运
+```
+base.DeSpawn(mode)  // 先让基类清理 HaulDestination
+slotGroup = null    // 之后才释放 slotGroup (顺序很重要!)
+```
 
 ---
 
-## 5. 配方消耗 —— MachineRecipeExtension
+## 3. Def 扩展系统
 
-**文件**：`Defs/RecipeDefs/B_CompositeStoneProcessorRecipes.xml`（附加在每个配方上）
-
-### C# 定义
-
-```csharp
-public class MachineRecipeExtension : DefModExtension
-{
-    public float fuelConsumptionRate;  // 每 60 tick 消耗燃料量
-    public int powerConsume;           // 加工时额外功率（W）
-}
-```
-
-### XML 模板
+### MachineRecipeExtension - 加工配方消耗
 
 ```xml
-<modExtensions>
-  <li Class="CompositeStoneProcessor.MachineRecipeExtension">
-    <fuelConsumptionRate>0.5</fuelConsumptionRate>  <!-- 每 60 tick 消耗 -->
-    <powerConsume>200</powerConsume>                 <!-- 加工功率（W） -->
-  </li>
-</modExtensions>
-```
-
-### 字段说明
-
-| 字段                    | 类型    | 必需  | 说明                        |
-| --------------------- | ----- | --- | ------------------------- |
-| `fuelConsumptionRate` | float | 是   | 每 60 tick 消耗的燃料单位数。必须 > 0 |
-| `powerConsume`        | int   | 是   | 加工时的额外耗电量（W），叠加在待机 50W 之上 |
-
-> 不含此扩展的配方使用 Mod 设置中的默认值（`defaultFuelRate` / `defaultPowerConsume`）。
-
----
-
-## 6. 研究项目 —— ResearchProjectDef
-
-**文件**：`Defs/ResearchDefs/ResearchProjectDefs.xml`
-
-### 模板
-
-```xml
-<ResearchProjectDef>
-    <defName>YourResearchDefName</defName>
-    <label>Your Research Label</label>
-    <techLevel>Industrial</techLevel>
-    <baseCost>1200</baseCost>
-    <description>Description of your research.</description>
-    <prerequisites>
-      <li>RequiredResearchDefName</li>              <!-- 前置研究 -->
-    </prerequisites>
-    <tab>CompositeTechnology</tab>                  <!-- 研究标签 -->
-    <researchViewX>1</researchViewX>                <!-- X 坐标 -->
-    <researchViewY>6</researchViewY>                <!-- Y 坐标 -->
-</ResearchProjectDef>
-```
-
-### 现有研究参考
-
-| defName                    | 成本   | 前置                       | 坐标    |
-| -------------------------- | ---- | ------------------------ | ----- |
-| `CompositeStoneProcessing` | 700  | Stonecutting             | (0,6) |
-| `CompositeStoneUpgradeMK1` | 1200 | CompositeStoneProcessing | (1,6) |
-| `CompositeStoneUpgradeMK2` | 2200 | CompositeStoneUpgradeMK1 | (2,6) |
-| `CompositeStoneUpgradeMK3` | 3500 | CompositeStoneUpgradeMK2 | (3,6) |
-
----
-
-## 7. 升级物资搬运 —— WorkGiverDef
-
-**文件**：`Defs/WorkGiverDefs/B_UpgradeHaul.xml`
-
-```xml
-<WorkGiverDef>
-    <defName>DeliverResourcesToProcessor</defName>
-    <label>deliver resources to processor upgrade</label>
-    <giverClass>CompositeStoneProcessor.WorkGiver_UpgradeHaul</giverClass>
-    <workType>Hauling</workType>
-    <priorityInType>8</priorityInType>
-    <verb>deliver to</verb>
-    <gerund>delivering to</gerund>
-    <requiredCapacities>
-      <li>Manipulation</li>
-    </requiredCapacities>
-</WorkGiverDef>
-```
-
-> **工作原理**：当加工站有升级请求时，此 WorkGiver 扫描地图上所需的 Steel/Component，生成 `HaulToCell` 任务。殖民者将物资搬运到加工站后，`Notify_ReceivedThing` 吸入并计数。无需玩家干预。
-
----
-
-## 8. 建筑产热 —— CompProperties_HeatPusher
-
-```xml
-<li Class="CompProperties_HeatPusher">
-    <compClass>CompHeatPusherPowered</compClass>   <!-- 使用原版有功耗热器 -->
-    <heatPerSecond>3</heatPerSecond>               <!-- 每秒产热量 -->
+<li Class="CompositeStoneProcessor.MachineRecipeExtension">
+  <fuelConsumptionRate>0.5</fuelConsumptionRate>  <!-- 每60tick消耗燃料 -->
+  <powerConsume>200</powerConsume>                 <!-- 加工时额外W -->
 </li>
 ```
 
-> 使用原版 `CompHeatPusherPowered`，仅在建筑有功率输出时产热（加工时或待机时有电网连接时）。燃料模式下加工也产热（通过内部调整 `PowerOutput`）。
+无此扩展 -> 使用 Mod 设置 defaultFuelRate / defaultPowerConsume。
+
+### MachineUpdateRecipeExtension - 升级模块
+
+```xml
+<li Class="CompositeStoneProcessor.MachineUpdateRecipeExtension">
+  <speedUp>0.35</speedUp>       <!-- float, 加工速度增量 -->
+  <sortOrder>10</sortOrder>     <!-- int, 排序(升序) -->
+  <skillLevel>10</skillLevel>   <!-- int, 等效手工技能 -->
+  <unlockRecipe>                <!-- list, 安装后自动解锁的清单 -->
+    <li>SomeRecipeDef</li>
+  </unlockRecipe>
+  <componentsPrerequisites>     <!-- list, 必须已安装的前置升级 -->
+    <li>PrereqDefName</li>
+  </componentsPrerequisites>
+</li>
+```
 
 ---
 
-## 9. 翻译文件
+## 4. 升级系统流程
 
-### 中文翻译
+```
+点击安装 -> RequestUpgradeInstall(def)
+  -> 验证(未安装+研究解锁+前置已装+不在队列)
+  -> pendingUpgradeQueue.Add(def)
+  -> 若为首个 -> 初始化 pendingUpgradeResources
 
-**文件**：`Languages/ChineseSimplified/Keyed/B_CompositeStoneProcessor.xml`
+殖民者搬运 -> Notify_ReceivedThing -> TryAcceptUpgradeResource
+  -> 扣除并销毁 -> 超出需求时 GenPlace.TryPlaceThing 弹出
 
-### 英文翻译
+物资收集完 -> upgradeProgressTicks = 0 -> 计时 (ti * 0.5 each tick)
 
-**文件**：`Languages/English/Keyed/B_CompositeStoneProcessor.xml`
-
-格式：
-
-```xml
-<LanguageData>
-  <YourKey>Your translation text</YourKey>
-</LanguageData>
+计时完成 -> CompleteUpgrade()
+  -> installedUpgrades.Add(def)
+  -> 添加 unlockRecipe 清单
+  -> 出队 -> 下一个初始化
 ```
 
-所有显示给玩家的字符串均需添加翻译键。当前所有 45 个键已完整覆盖中英文。
+队列 FIFO。升级 RecipeDef 不应包含 <recipeUsers>。
+
+---
+
+## 5. 燃料/电力系统
+
+### 切换逻辑
+
+| 状态 | 电力 | 燃料 | PowerOutput |
+|------|------|------|-------------|
+| 待机(有电网) | 50W | 无 | -50 |
+| 待机(无电网) | 0 | 无 | 0 |
+| 加工(有电) | 50+recipe.power | 无 | -(50+power) |
+| 加工(无电有燃料) | 0 | recipe.fuelRate | -1 |
+
+有燃料时 DrawGUIOverlay() 跳过无电力图标。
+
+---
+
+## 6. 温度与产热
+
+### 效率曲线
+
+- -10C ~ 80C: 1.0x
+- -10C -> -30C: 1.0 -> 0 (线性)
+- 80C -> 120C: 1.0 -> 0 (线性)
+- < -30C 或 > 120C: 0 (停止)
+
+CompHeatPusherPowered 自动产热 (heatPerSecond=3)。
+
+---
+
+## 7. 升级界面 ITab
+
+- 全动态高度: 34f + costH + 4f + speedH + 4f + thirdH + 4f
+- 排序: sortOrder 升序
+- 颜色: Locked=灰/Ready=白/Installing=橙/Installed=绿
+- 锁定时框透明度 0.6
+
+---
+
+## 8. WorkGiver - 升级物资搬运
+
+优先级 8 (原版搬运 15 之上)。HaulToCell Job。
+
+---
+
+## 9. Alert
+
+扫描 allBuildingsColonist (非 ThingsInGroup)。缺原料或缺能源时触发。
 
 ---
 
 ## 10. Mod 设置
 
-**文件**：`Source/CompositeStoneProcessor/CompositeStoneProcessorMod.cs`
-
-在游戏主菜单 → 选项 → Mod 选项 → Composite Stone Processor 中配置：
-
-| 设置                    | 类型     | 默认       | 范围             |
-| --------------------- | ------ | -------- | -------------- |
-| `alertEnabled`        | bool   | true     | 资源不足提醒         |
-| `tickInterval`        | int    | 120      | 60~1000，步进 10  |
-| `bgColorHex`          | string | "4B4B4B" | 十六进制色码         |
-| `defaultFuelRate`     | float  | 0.5      | 0.1~3.0，步进 0.1 |
-| `defaultPowerConsume` | int    | 200      | 50~500，步进 10   |
+| 设置 | 默认 | 范围 |
+|------|------|------|
+| alertEnabled | true | - |
+| tickInterval | 120 | 60~1000 |
+| bgColorHex | "282828" | 6 chars |
+| defaultFuelRate | 0.5 | 0.1~3.0 |
+| defaultPowerConsume | 200 | 50~500 |
+| defaultSkillLevel | 6 | 1~20 |
 
 ---
 
-## 11. 完整示例：添加一个升级模块
+## 11. 常见问题与陷阱
 
-以下展示添加一个名为 "MK4 Speed Module" 的新升级，需要研究 `CompositeStoneUpgradeMK3`，消耗 150 Steel + 15 Component，速度 +0.60。
-
-### 步骤 1：添加研究
-
-在 `Defs/ResearchDefs/ResearchProjectDefs.xml` 中添加：
-
-```xml
-<ResearchProjectDef>
-    <defName>CompositeStoneUpgradeMK4</defName>
-    <label>Processor upgrade MK4</label>
-    <techLevel>Industrial</techLevel>
-    <baseCost>5000</baseCost>
-    <description>Ultimate processor upgrade. Equivalent to Crafting skill 25.</description>
-    <prerequisites>
-      <li>CompositeStoneUpgradeMK3</li>
-    </prerequisites>
-    <tab>CompositeTechnology</tab>
-    <researchViewX>4</researchViewX>
-    <researchViewY>6</researchViewY>
-</ResearchProjectDef>
-```
-
-### 步骤 2：添加升级模块
-
-在 `Defs/MachinesUpdateRecipeDefs/B_CompositeUpgrades.xml` 中添加：
-
-```xml
-<RecipeDef>
-    <defName>CSP_UpgradeMK4</defName>
-    <label>MK4 Speed Module</label>
-    <description>Ultimate speed enhancement module. Requires MK1+MK2+MK3. Equivalent to Crafting skill 25.</description>
-    <workAmount>2000</workAmount>
-    <researchPrerequisite>CompositeStoneUpgradeMK4</researchPrerequisite>
-    <ingredients>
-      <li>
-        <filter><thingDefs><li>Steel</li></thingDefs></filter>
-        <count>150</count>
-      </li>
-      <li>
-        <filter><thingDefs><li>ComponentIndustrial</li></thingDefs></filter>
-        <count>15</count>
-      </li>
-    </ingredients>
-    <modExtensions>
-      <li Class="CompositeStoneProcessor.MachineUpdateRecipeExtension">
-        <speedUp>0.60</speedUp>
-        <sortOrder>40</sortOrder>
-        <skillLevel>25</skillLevel>
-      </li>
-    </modExtensions>
-</RecipeDef>
-```
-
-### 步骤 3（可选）：添加翻译
-
-在翻译文件中添加：
-
-```xml
-<CompositeStoneUpgradeMK4.label>加工站升级MK4</CompositeStoneUpgradeMK4.label>
-<CompositeStoneUpgradeMK4.description>加工站的最终极致升级，处理速度提升至等效手工技能25级。</CompositeStoneUpgradeMK4.description>
-```
-
-升级界面中的名称和技能等级由 `<label>` 和 `skillLevel` 字段自动生成，无需额外翻译。
-
-### 无需修改
-
-- C# 代码 → 无需修改，`DefDatabase<RecipeDef>` 自动读取
-- ITab_Upgrades → 自动显示，`sortOrder` 决定排序
-- WorkGiver → 自动读取材料清单
-- 安装逻辑 → 自动处理
+1. **slotGroup空** -> base.DeSpawn 之后才设 slotGroup=null
+2. **配方重复** -> 升级 RecipeDef 不应包含 recipeUsers
+3. **researchPrerequisite/s 混用** -> 单个用单数，多个用复数
+4. **燃料不消耗** -> consumeFuelOnlyWhenUsed=true 需手动 ConsumeFuel()
+5. **无电力图标** -> 有燃料时 DrawGUIOverlay return
+6. **效率恒1** -> speed = TotalSpeed * GetTempFactor()
+7. **加工索引偏移** -> 建临时副本再遍历删除
+8. **升级进度丢失** -> ExposeData 中序列化 upgradeProgressTicks
 
 ---
 
-## 12. 完整示例：添加一个加工配方
+## 12. 性能说明
 
-以下展示添加一个名为 "批量快速加工复合石材（效率型）" 的新配方，消耗 2 石块产出 50 复合石材。
-
-### 步骤 1：添加配方
-
-在 `Defs/RecipeDefs/B_CompositeStoneProcessorRecipes.xml` 中添加：
-
-```xml
-<RecipeDef ParentName="MakeCompositeStoneAutoBase">
-    <defName>MakeCompositeStoneAutoEF</defName>
-    <label>Composite stone processing (Efficiency)</label>
-    <workAmount>2800</workAmount>
-    <ingredients>
-      <li>
-        <filter><categories><li>StoneChunks</li></categories></filter>
-        <count>2</count>
-      </li>
-    </ingredients>
-    <products><BlockCompositeStone>50</BlockCompositeStone></products>
-    <skillRequirements><Crafting>8</Crafting></skillRequirements>
-    <researchPrerequisite>FastcuttingB</researchPrerequisite>
-    <modExtensions>
-      <li Class="CompositeStoneProcessor.MachineRecipeExtension">
-        <fuelConsumptionRate>0.9</fuelConsumptionRate>
-        <powerConsume>300</powerConsume>
-      </li>
-    </modExtensions>
-</RecipeDef>
-```
-
-### 步骤 2：添加翻译
-
-```xml
-<MakeCompositeStoneAutoEF.label>加工复合石材（效率型）</MakeCompositeStoneAutoEF.label>
-<MakeCompositeStoneAutoEF.description>将2块大块石头加工成50份复合石材，效率提升。</MakeCompositeStoneAutoEF.description>
-```
-
-### 无需修改
-
-- C# 代码 → 无需修改
-- `recipeUsers` → 已在抽象基类中定义
-- 技能检查 → 自动对比 `EffectiveSkill` 和配方要求
-- 燃料/电力消耗 → 自动读取 `MachineRecipeExtension`
+- 空闲降频: FindBill() 每 ProcTickInterval tick 一次
+- Alert 扫描: allBuildingsColonist 替代 ThingsInGroup(BuildingArtificial)
+- 无 Harmony 补丁
+- 兼容: Butter++ / Performance Optimizer / Missile Girl / BWM / VFE
+- 空闲 ~0.3us/tick, 加工 ~2us/120tick
 
 ---
 
-## 附录：速度计算公式
+## 13. 兼容性确认
 
-```
-总速度系数 = 1.0 + 所有已安装升级的 speedUp 之和
-每次加工推进 = tickInterval × 总速度系数 × 温度效率
-```
-
-## 附录：燃料/电力逻辑
-
-| 状态       | 电力消耗                 | 燃料消耗                            |
-| -------- | -------------------- | ------------------------------- |
-| 待机 + 有电网 | 50W                  | 无                               |
-| 待机 + 仅燃料 | 0                    | 无                               |
-| 加工 + 有电网 | 50 + 配方 powerConsume | 无                               |
-| 加工 + 仅燃料 | 虚拟负载（触发产热）           | 配方 fuelConsumptionRate / 60tick |
-| 无电无燃料    | 0                    | 无                               |
-
-## 附录：温度效率曲线
-
-| 温度范围              | 效率              |
-| ----------------- | --------------- |
-| -10°C ~ 80°C      | 100%            |
-| -30°C ~ -10°C     | 100% → 0%（线性下降） |
-| 80°C ~ 120°C      | 100% → 0%（线性下降） |
-| < -30°C 或 > 120°C | 0%（停止工作）        |
+- Butter++: 无冲突 (无 DoSingleTick 转译)
+- Pick Up And Haul: 使用标准 HaulToCell Job
+- Better Workbench Management: 通过 Patch 集成
+- Vanilla Expanded Framework: 通过 Patch 兼容

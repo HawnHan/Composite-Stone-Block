@@ -123,10 +123,10 @@ namespace CompositeStoneProcessor
                     GenPlace.TryPlaceThing(split, Position, Map, ThingPlaceMode.Near);
                 }
             }
-            slotGroup = null;
             pendingUpgradeQueue.Clear();
             pendingUpgradeResources = null;
             base.DeSpawn(mode);
+            slotGroup = null;
         }
         public override void ExposeData()
         {
@@ -203,7 +203,7 @@ namespace CompositeStoneProcessor
                 if (!hp && hf)
                 {
                     refuelableComp.ConsumeFuel(Mathf.Max(1, Mathf.RoundToInt(CompositeStoneProcessorMod.settings.defaultFuelRate)));
-                    GenTemperature.PushHeat(Position, Map, 0.05f);
+                    if (powerComp != null) powerComp.PowerOutput = -1;
                 }
                 SetPowerConsumption(hp ? CompositeStoneProcessorMod.settings.defaultPowerConsume : 0);
             }
@@ -248,7 +248,11 @@ namespace CompositeStoneProcessor
         }
         private void TryAcceptUpgradeResource(Thing thing)
         {
-            if (pendingUpgradeResources == null || pendingUpgradeResources.Count == 0) return;
+            if (pendingUpgradeResources == null || pendingUpgradeResources.Count == 0)
+            {
+                if (thing.Spawned) GenPlace.TryPlaceThing(thing, thing.Position, Map, ThingPlaceMode.Near);
+                return;
+            }
             for (int i = 0; i < pendingUpgradeResources.Count; i++)
             {
                 if (pendingUpgradeResources[i].thingDef == thing.def && pendingUpgradeResources[i].count > 0)
